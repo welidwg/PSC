@@ -63,10 +63,37 @@ if (isset($_SESSION["login"])) {
             return window.location.href = "./index.php";
         }
     </script>
+    <style>
+        #loader {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: #f9fafa;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+    </style>
 </head>
 
 <body>
     <div id="wrapper">
+        <div id="loader">
+            <div class="mx-auto " style="display: flex;flex-direction: column;padding: 20px;color:black;align-items: center;margin: 11px">
+                <img src="../assets/img/logobiblio[black].png" alt=" MRM" style="width: 100px">
+                <br>
+                Chargement en cours..
+
+                <div class="spinner-border  " style="color:#f2b849" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+
+
+        </div>
         <nav class="navbar navbar-dark shadow-lg d-none d-md-none d-lg-flex align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background: #eaeaeb;">
             <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">
                     <div class="sidebar-brand-icon rotate-n-15"><img class="rounded border shadow-sm d-lg-flex align-items-lg-center" src="../assets/img/logobiblio[black].png" style="width: 40px;transform: rotate(15deg) skew(0deg);"></div>
@@ -80,6 +107,12 @@ if (isset($_SESSION["login"])) {
                         <li class="nav-item"><a class="nav-link" href="./login.php" style="color: rgb(43,42,41);"><i class="fas fa-sign-in-alt" style="color: rgb(43,42,41);"></i><span><span>Se connecter</span></span></a></li>
                         <li class="nav-item"><a class="nav-link" href="./register.php" style="color: rgb(43,42,41);"><i class="fas fa-user-plus" style="color: rgb(43,42,41);"></i><span>Créer un compte</span></a></li>
                     <?php } ?>
+                    <?php if (isset($_SESSION["login"]) && $_SESSION["role"] == 1) { ?>
+                        <li class="nav-item"><a class="nav-link" href="./listeAdherant.php" style="color: rgb(43,42,41);"><i class="fas fa-users" style="color: rgb(43,42,41);"></i><span>Liste des adhérants</span></a></li>
+
+                    <?php } ?>
+
+
 
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button" style="color: rgb(43,42,41);background: rgb(43,42,41);"></button></div>
@@ -130,5 +163,12 @@ if (isset($_SESSION["login"])) {
                     <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
                     <script src="../assets/js/bs-init.js"></script>
                     <script src="../assets/js/theme.js"></script>
+                    <script>
+                        window.addEventListener("load", () => {
+                            setTimeout(() => {
+                                $("#loader").fadeOut();
+                            }, 500);
+                        });
+                    </script>
 
 </html>

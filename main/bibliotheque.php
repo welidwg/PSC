@@ -27,7 +27,7 @@ $connect = Connect();
                     <div class="col-md-12 col-lg-9 mx-auto" style="height: 59px;">
 
                         <form method="get" class="d-flex user">
-                            <label for="search" class="" style="width: 110px;">Filtré par </label>
+                            <label for="search" class="" style="width: 110px;">Filtrer par </label>
 
                             <div class="dropdown " style="width: 10vw;">
                                 <select id="search" class="form-control w-100" style="background-color: #f2b849;color:white" name="search" id="">
@@ -43,7 +43,7 @@ $connect = Connect();
                                                                                         # code...
                                                                                         break;
                                                                                     case 3:
-                                                                                        echo "ISBN";
+                                                                                        echo "Référence";
                                                                                         # code...
                                                                                         break;
                                                                                     case 4:
@@ -61,11 +61,57 @@ $connect = Connect();
 
                                     <?php
                                     } ?>
-                                    <option value="1">Titre</option>
-                                    <option value="2">Auteur</option>
-                                    <option value="3">ISBN</option>
-                                    <option value="4">Location</option>
-                                    <option value="5">Type</option>
+                                    <?php if (isset($_GET['search'])) {
+                                        switch ($_GET['search']) {
+                                            case '1':
+                                                echo ' <option value="2">Auteur</option>
+                                        <option value="3">Référence</option>
+                                        <option value="4">Location</option>
+                                        <option value="5">Type</option>';
+                                                # code...
+                                                break;
+                                            case '2':
+                                                echo '
+                                        <option value="1">Titre</option>
+                                        <option value="3">Référence</option>
+                                        <option value="4">Location</option>
+                                        <option value="5">Type</option>';
+                                                break;
+                                            case '3':
+                                                echo '
+                                        <option value="1">Titre</option>
+                                        <option value="2">Auteur</option>
+                                        <option value="4">Location</option>
+                                        <option value="5">Type</option>';
+                                                break;
+                                            case '4':
+                                                echo '
+                                        <option value="1">Titre</option>
+                                        <option value="2">Auteur</option>
+                                        <option value="3">Référence</option>
+                                        <option value="5">Type</option>';
+                                                break;
+                                            case '5':
+                                                echo '
+                                        <option value="1">Titre</option>
+                                        <option value="2">Auteur</option>
+                                        <option value="3">Référence</option>
+                                        <option value="4">Location</option>';
+                                                break;
+                                            default:
+                                                # code...
+                                                break;
+                                        }
+                                    } else {
+                                    ?>
+                                        <option value="1">Titre</option>
+                                        <option value="2">Auteur</option>
+                                        <option value="3">Référence</option>
+                                        <option value="4">Location</option>
+                                        <option value="5">Type</option>
+                                    <?php
+                                    } ?>
+
                                 </select>
                             </div>
                             <div class="text-md-end w-100 dataTables_filter" id="dataTable_filter"><input minlength="3" required name="q" value="<?php if (isset($_GET["q"])) {

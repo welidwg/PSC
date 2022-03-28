@@ -28,7 +28,7 @@ if (isset($_SESSION["login"]) && $role == 1) {
                         <div class="col-md-12 col-lg-9 mx-auto" style="height: 59px;">
 
                             <form method="get" class="d-flex user">
-                                <label for="search" class="" style="width: 110px;">Filtré par </label>
+                                <label for="search" class="" style="width: 110px;">Filtrer par </label>
 
                                 <div class="dropdown " style="width: 10vw;">
                                     <select id="search" class="form-control w-100" style="background-color: #f2b849;color:white" name="search" id="">
@@ -55,9 +55,36 @@ if (isset($_SESSION["login"]) && $role == 1) {
 
                                         <?php
                                         } ?>
-                                        <option value="1">Code</option>
-                                        <option value="2">Nom</option>
-                                        <option value="3">Ville/Pays</option>
+                                        <?php if (isset($_GET["search"])) {
+                                            switch ($_GET["search"]) {
+                                                case 1:
+                                                    echo '
+                                            <option value="2">Nom</option>
+                                            <option value="3">Ville/Pays</option>';
+                                                    # code...
+                                                    break;
+                                                case 2:
+                                                    echo '
+                                            <option value="1">Code</option>
+                                            <option value="3">Ville/Pays</option>';
+                                                    # code...
+                                                    break;
+                                                case 3:
+                                                    echo '
+                                            <option value="1">Code</option>
+                                            <option value="2">Nom</option>';
+                                                    break;
+
+                                                default:
+                                                    # code...
+                                                    break;
+                                            }
+                                        } else { ?>
+                                            <option value="1">Code</option>
+                                            <option value="2">Nom</option>
+                                            <option value="3">Ville/Pays</option>
+                                        <?php } ?>
+
 
                                     </select>
                                 </div>
@@ -88,12 +115,18 @@ if (isset($_SESSION["login"]) && $role == 1) {
                                 );
                                 break;
                             case 2:
+                                if (!CheckAr($val)) {
+                                    $val = translate($val, "en", "ar");
+                                }
                                 $data = runQuery("SELECT * from empr   WHERE empr_nom like '%$val%' or empr_prenom like '%$val%'  Limit $premier,$parPage ");
                                 $nbArticles = mysqli_num_rows(
                                     mysqli_query($connect, "SELECT * from empr  WHERE empr_nom like '%$val%' or empr_prenom like '%$val%'")
                                 );
                                 break;
                             case 3:
+                                if (!CheckAr($val)) {
+                                    $val = translate($val, "en", "ar");
+                                }
                                 $data = runQuery("SELECT * from empr   WHERE  empr_ville like '%$val%' or empr_pays like '%$val%' Limit $premier,$parPage");
                                 $nbArticles = mysqli_num_rows(
                                     mysqli_query($connect, "SELECT * from empr WHERE empr_ville like '%$val%' or empr_pays like '%$val%'")
@@ -116,8 +149,8 @@ if (isset($_SESSION["login"]) && $role == 1) {
                     }
 
 
-
                     ?>
+
                     <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info" style="border-color: rgb(133, 135, 150);">
                         <table class="table my-0" id="dataTable">
                             <thead>
