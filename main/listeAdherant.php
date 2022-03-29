@@ -182,7 +182,7 @@ if (isset($_SESSION["login"]) && $role == 1) {
 
                                             <td style="color: #7a6a5e;"><?= $data[$kk]["empr_prof"] ?></td>
                                             <td>
-                                                <a target="_blank" href="./bookDetails.php?explID=&noticeID=">Plus</a>
+                                                <a target="_blank" href="./userDetails.php?idUser=<?= $data[$kk]["id_empr"] ?>">Plus</a>
                                             </td>
                                         </tr>
                                     <?php }
