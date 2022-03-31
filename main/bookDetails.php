@@ -21,7 +21,7 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?= $appName ?> Détails de livre</title>
-       
+
         <style>
             input {
                 color: black;
@@ -212,6 +212,24 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
                                         <?php
                                         } ?>
                                     </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="color: rgb(233,230,232);">
+                            <div class="col-md-6 col-sm-8">
+                                <div class="mb-3">
+                                    <label class="form-label" for="" style="color: rgb(121,105,93);">
+                                        <strong>Date Parution&nbsp;</strong>
+                                    </label>
+                                    <input class="form-control" disabled value="<?= $data["date_parution"] ?>" type="text"  placeholder="vide"  style="">
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-8">
+                                <div class="mb-3">
+                                    <label class="form-label" for="" style="color: rgb(121,105,93);">
+                                        <strong>Titre 4&nbsp;</strong>
+                                    </label>
+                                    <input class="form-control" value="<?= $data["tit4"] ?>" type="text" id="tit4" placeholder="vide" name="tit4" style="">
                                 </div>
                             </div>
                         </div>

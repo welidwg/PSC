@@ -201,7 +201,29 @@ $connect = Connect();
                         </thead>
                         <tbody style="color: rgb(43,42,41);">
                             <?php if (!empty($data)) {
+                                $class = "far fa-bookmark";
+                                $i = 0;
                                 foreach ($data as $k => $v) {
+                                    $i++;
+                                    $class = "far fa-bookmark";
+                                    $user = GetUser($_SESSION["idUser"]);
+                                    if ($user["favs"] == "") {
+                                        $class = "far fa-bookmark";
+                                    } else {
+                                        $favs = explode(",", $user["favs"]);
+                                        if (count($favs) == 1) {
+                                            if ($favs[0] == $data[$k]["expl_id"]) {
+                                                $class = "fas fa-bookmark";
+                                            }
+                                        } else {
+                                            foreach ($favs as $kk => $vv) {
+                                                if ($favs[$kk] == $data[$k]["expl_id"]) {
+                                                    $class = "fas fa-bookmark";
+                                                }
+                                            }
+                                        }
+                                    }
+
                                     # code...
 
                             ?>
@@ -215,10 +237,50 @@ $connect = Connect();
                                                                     ?></td>
                                         <td style="color: #7a6a5e;"><?= $data[$k]["author_rejete"] . " " . $data[$k]["author_name"]  ?></td>
                                         <td><?= $data[$k]["location_libelle"] ?></td>
-                                        <td style="color: #7a6a5e;">test</td>
+                                        <td style="color: #7a6a5e;"><?= $data[$k]["index_l"] ?></td>
                                         <td style="color: #7a6a5e;"><?= $data[$k]["section_libelle"] ?></td>
-                                        <td>
-                                            <a target="_blank" href="./bookDetails.php?explID=<?= $data[$k]["expl_id"] ?>&noticeID=<?= $data[$k]["notice_id"] ?>">Plus</a>
+                                        <td class="d-flex" style="justify-content: space-between;border:unset">
+                                            <a target="_blank" class="text-dark bg-transparent " style="border:none" href="./bookDetails.php?explID=<?= $data[$k]["expl_id"] ?>&noticeID=<?= $data[$k]["notice_id"] ?>"><i class="fa fa-eye"></i></a>
+                                            <?php if (isset($_SESSION["login"])) {
+
+                                            ?>
+                                                <form id="fav<?= $i ?>">
+                                                    <input type="hidden" id="expl_id<?= $i ?>" name="expl_id<?= $i ?>" value="<?= $data[$k]["expl_id"] ?>">
+
+                                                    <button type="submit" class=" bg-transparent text-danger border-0"><i id="icon<?= $i ?>" class="<?= $class ?>"></i></button>
+                                                </form>
+                                            <?php } ?>
+                                            <script>
+                                                $(function() {
+                                                    $("#fav<?= $i ?>").on("submit", (e) => {
+                                                        e.preventDefault();
+                                                        let expl_id = $("#expl_id<?= $i ?>").val();
+                                                        $.ajax({
+                                                            type: "post",
+                                                            url: "../Scripts/booksManager.php?Fav",
+                                                            data: {
+                                                                expl_id: expl_id
+                                                            },
+                                                            success: function(res) {
+                                                                $("#icon<?= $i ?>").removeAttr("class");
+
+                                                                if (res == 1) {
+                                                                    $("#icon<?= $i ?>").addClass("fas fa-bookmark")
+                                                                } else {
+                                                                    $("#icon<?= $i ?>").addClass("far fa-bookmark")
+
+                                                                }
+                                                                console.log(res);
+                                                            },
+                                                            error: (e) => {
+                                                                console.log(e.responseText);
+                                                                alertify.error("Erreur de serveur .. ")
+                                                            }
+                                                        });
+                                                    })
+                                                });
+                                            </script>
+
                                         </td>
                                     </tr>
                                 <?php }
@@ -237,8 +299,8 @@ $connect = Connect();
                                 <td><strong style="color: #7a6a5e;">Titres de livre</strong></td>
                                 <td><strong style="color: #7a6a5e;">Auteur</strong></td>
                                 <td><strong style="color: #7a6a5e;">Location</strong></td>
-                                <td><strong style="color: #7a6a5e;">categorie</strong></td>
-                                <td><strong style="color: #7a6a5e;">print date</strong></td>
+                                <td><strong style="color: #7a6a5e;">Categorie</strong></td>
+                                <td><strong style="color: #7a6a5e;">Section</strong></td>
                                 <td style="color: rgb(122,106,94);"><strong>Action</strong><br></td>
                             </tr>
                         </tfoot>

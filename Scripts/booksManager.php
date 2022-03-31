@@ -2,6 +2,7 @@
 
 require_once("./utiles.php");
 $connect = Connect();
+session_start();
 if (isset($_GET["edit"])) {
     $notice = $_POST["id_notice"];
     $expl = $_POST["id_expl"];
@@ -39,4 +40,51 @@ if (isset($_GET["edit"])) {
         echo mysqli_error($connect);
     }
     //echo $npage;
+} else if (isset($_GET["Fav"])) {
+    $expl_id = $_POST["expl_id"];
+    $exemplaire = mysqli_fetch_array(mysqli_query($connect, "SELECT * from exemplaires where expl_id = $expl_id"));
+    $idUser = $_SESSION["idUser"];
+    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from userAccounts where idUser = $idUser"));
+    $fav = "";
+    if ($user["favs"] == "") {
+        $fav = $expl_id;
+        $action = "1";
+    } else {
+        $test = explode(",", $user["favs"]);
+
+        if (count($test) == 1) {
+            if ($test[0] == $expl_id) {
+                $fav = "";
+                $action = "0";
+            } else {
+                $fav = $test[0] . "," . $expl_id;
+                $action = "1";
+            }
+        } else {
+            if (in_array($expl_id, $test)) {
+                foreach ($test as $k => $v) {
+                    if ($test[$k] == $expl_id) {
+                        unset($test[$k]);
+                    }
+                }
+                foreach ($test as $kk => $vv) {
+                    if ($fav == "") {
+                        $fav = $test[$kk];
+                    } else {
+                        $fav .= "," . $test[$kk];
+                    }
+                }
+                $action = "0";
+            } else {
+                $fav = $user["favs"] . "," . $expl_id;
+                $action = "1";
+            }
+        }
+    }
+
+    if (mysqli_query($connect, "UPDATE userAccounts SET favs='$fav' where idUser=$idUser")) {
+        echo $action;
+    } else {
+        echo mysqli_error($connect);
+    }
 }

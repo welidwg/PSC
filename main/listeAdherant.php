@@ -109,16 +109,16 @@ if (isset($_SESSION["login"]) && $role == 1) {
 
                         switch ($_GET["search"]) {
                             case 1:
-                                $data = runQuery("SELECT * from empr   WHERE  empr_cb='$val' Limit $premier,$parPage ");
+                                $data = runQuery("SELECT * from empr   WHERE  empr_cb='$val'  order by empr_cb asc Limit $premier,$parPage ");
                                 $nbArticles = mysqli_num_rows(
-                                    mysqli_query($connect, "SELECT * from empr E,userAccounts U  WHERE E.id_empr=U.idUser  and empr_cb='$val'")
+                                    mysqli_query($connect, "SELECT * from empr E,userAccounts U  WHERE E.id_empr=U.idUser  and empr_cb='$val' ")
                                 );
                                 break;
                             case 2:
                                 if (!CheckAr($val)) {
                                     $val = translate($val, "en", "ar");
                                 }
-                                $data = runQuery("SELECT * from empr   WHERE empr_nom like '%$val%' or empr_prenom like '%$val%'  Limit $premier,$parPage ");
+                                $data = runQuery("SELECT * from empr   WHERE empr_nom like '%$val%' or empr_prenom like '%$val%'  order by empr_cb asc  Limit $premier,$parPage ");
                                 $nbArticles = mysqli_num_rows(
                                     mysqli_query($connect, "SELECT * from empr  WHERE empr_nom like '%$val%' or empr_prenom like '%$val%'")
                                 );
@@ -127,7 +127,7 @@ if (isset($_SESSION["login"]) && $role == 1) {
                                 if (!CheckAr($val)) {
                                     $val = translate($val, "en", "ar");
                                 }
-                                $data = runQuery("SELECT * from empr   WHERE  empr_ville like '%$val%' or empr_pays like '%$val%' Limit $premier,$parPage");
+                                $data = runQuery("SELECT * from empr   WHERE  empr_ville like '%$val%' or empr_pays like '%$val%' order by empr_cb asc Limit $premier,$parPage");
                                 $nbArticles = mysqli_num_rows(
                                     mysqli_query($connect, "SELECT * from empr WHERE empr_ville like '%$val%' or empr_pays like '%$val%'")
                                 );
@@ -145,7 +145,7 @@ if (isset($_SESSION["login"]) && $role == 1) {
                         );
                         $pages = ceil($nbArticles  / $parPage);
                         $premier = ($currentPage * $parPage) - $parPage;
-                        $data = runQuery("SELECT * from empr  order by empr_nom asc Limit $premier,$parPage");
+                        $data = runQuery("SELECT * from empr  order by empr_cb asc Limit $premier,$parPage");
                     }
 
 
@@ -182,7 +182,7 @@ if (isset($_SESSION["login"]) && $role == 1) {
 
                                             <td style="color: #7a6a5e;"><?= $data[$kk]["empr_prof"] ?></td>
                                             <td>
-                                                <a target="_blank" href="./userDetails.php?idUser=<?= $data[$kk]["id_empr"] ?>">Plus</a>
+                                                <a class="bg-transparent text-warning" target="_blank" href="./userDetails.php?idUser=<?= $data[$kk]["id_empr"] ?>"><i class="fa fa-eye"></i></a>
                                             </td>
                                         </tr>
                                     <?php }

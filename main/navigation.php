@@ -142,15 +142,33 @@ if (isset($_SESSION["login"])) {
                                                                                                                                                                                                                                                                                                 else echo "../assets/img/avatar.png"; ?>"> <?php $nom = explode(" ", $empr["empr_prenom"]);
                                                                                                                                                                                                                                                                                                                                             echo $nom[0] . " " .
                                                                                                                                                                                                                                                                                                                                                 $empr["empr_nom"]  ?></a>
-                                <div class="dropdown-menu"><a class="dropdown-item" href="profile.php"><i class="far fa-user-circle" style="margin-right: 5px;"></i>Mon profile</a><a class="dropdown-item" href="#"><i class="fas fa-book-reader" style="margin-right: 5px;width: 13px;"></i>Mes Livres</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="profile.php">
+                                        <i class="far fa-user-circle" style="margin-right: 5px;"></i>Mon profile</a>
+                                    <a class="dropdown-item" href="./favs.php">
+                                        <i class="fas fa-book-reader" style="margin-right: 5px;width: 13px;"></i>
+                                        Mes Favories
+                                    </a>
+
                                     <div class="dropdown-divider"></div><a class="dropdown-item" href="../Scripts/auth.php?Logout"><i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>Déconnexion</a>
                                 </div>
                             </div>
                         <?php } else if (isset($_SESSION["login"]) && $role == 1) {
                         ?>
-                            <div class="dropdown"><a class="dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="padding: 0px;color: #ef9c1f;font-weight: bold;"><img class="rounded-circle border rounded-0" style="width: 35px;height: 35px;margin: 0px;" src="<?php if ($usr["avatar"] != "") echo "../assets/img/avatars/" . $usr["avatar"];
-                                                                                                                                                                                                                                                                                                else echo "../assets/img/avatar.png"; ?>"><?= $usr["nom"]; ?></a>
-                                <div class="dropdown-menu"><a class="dropdown-item" href="profile.php"><i class="far fa-user-circle" style="margin-right: 5px;"></i>Mon profile</a><a class="dropdown-item" href="#"><i class="fas fa-book-reader" style="margin-right: 5px;width: 13px;"></i>Mes Livres</a>
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="padding: 0px;color: #ef9c1f;font-weight: bold;">
+                                    <img class="rounded-circle border rounded-0" style="width: 35px;height: 35px;margin: 0px;" src="<?php if ($usr["avatar"] != "") echo "../assets/img/avatars/" . $usr["avatar"];
+                                                                                                                                    else echo "../assets/img/avatar.png"; ?>"><?= $usr["nom"]; ?></a>
+
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="profile.php">
+                                        <i class="far fa-user-circle" style="margin-right: 5px;"></i>
+                                        Mon profile
+                                    </a>
+                                    <a class="dropdown-item" href="./favs.php">
+                                        <i class="fas fa-book-reader" style="margin-right: 5px;width: 13px;"></i>
+                                        Mes Favories
+                                    </a>
                                     <div class="dropdown-divider"></div><a class="dropdown-item" href="../Scripts/auth.php?Logout"><i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>Déconnexion</a>
                                 </div>
                             </div>
