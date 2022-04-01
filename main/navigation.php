@@ -25,6 +25,7 @@ if (isset($_SESSION["login"])) {
     <link rel="stylesheet" href="../assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="../assets/css/untitled.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
 
     <link rel="shortcut icon" href="../assets/img/logobiblio.png" type="image/x-icon">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -94,8 +95,24 @@ if (isset($_SESSION["login"])) {
 
 
         </div>
+        <script>
+            $(function() {
+
+                $(window).on("scroll", function() {
+
+                    if (window.scrollY > 50) {
+                        $("#navFix").css("position", "sticky");
+                        $("#navFix").css("top", "0");
+                    } else {
+
+                        $("#navFix").css("position", "relative");
+                    }
+                });
+            });
+        </script>
         <nav class="navbar navbar-dark shadow-lg d-none d-md-none d-lg-flex align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background: #eaeaeb;">
-            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">
+            <div class="container-fluid d-flex flex-column p-0" id="navFix">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">
                     <div class="sidebar-brand-icon rotate-n-15"><img class="rounded border shadow-sm d-lg-flex align-items-lg-center" src="../assets/img/logobiblio[black].png" style="width: 40px;transform: rotate(15deg) skew(0deg);"></div>
                     <div class="sidebar-brand-text mx-3"></div>
                 </a>
@@ -108,7 +125,11 @@ if (isset($_SESSION["login"])) {
                         <li class="nav-item"><a class="nav-link" href="./register.php" style="color: rgb(43,42,41);"><i class="fas fa-user-plus" style="color: rgb(43,42,41);"></i><span>Créer un compte</span></a></li>
                     <?php } ?>
                     <?php if (isset($_SESSION["login"]) && $_SESSION["role"] == 1) { ?>
+                        <div class="dropdown-divider"></div>
+                        <li class="nav-item"><a class="nav-link" href="./AjouterAdherant.php" style="color: rgb(43,42,41);"><i class="fas fa-user-plus" style="color: rgb(43,42,41);"></i><span>Ajouter un adhérant</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="./listeAdherant.php" style="color: rgb(43,42,41);"><i class="fas fa-users" style="color: rgb(43,42,41);"></i><span>Liste des adhérants</span></a></li>
+                        <div class="dropdown-divider"></div>
+                        <li class="nav-item"><a class="nav-link" href="#" style="color: rgb(43,42,41);"><i class="fas fa-users-cog" style="color: rgb(43,42,41);"></i><span>Ajouter un utilisateur</span></a></li>
 
                     <?php } ?>
 

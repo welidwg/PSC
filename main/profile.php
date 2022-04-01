@@ -110,7 +110,7 @@ if (isset($_SESSION["login"])) {
 
                                             <div class="mb-3">
                                                 <label class="form-label" for="maticule" style="color: rgb(121,105,93);font-size: 18px;font-weight: bold;">
-                                                    Status:
+                                                    Profession:
                                                     <br></label>
                                                 <select name="prof" id="prof" class="form-control">
                                                     <option value="<?= $empr["empr_prof"] ?>"><?= $empr["empr_prof"] ?></option>

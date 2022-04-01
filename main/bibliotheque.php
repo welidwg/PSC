@@ -206,19 +206,22 @@ $connect = Connect();
                                 foreach ($data as $k => $v) {
                                     $i++;
                                     $class = "far fa-bookmark";
-                                    $user = GetUser($_SESSION["idUser"]);
-                                    if ($user["favs"] == "") {
-                                        $class = "far fa-bookmark";
-                                    } else {
-                                        $favs = explode(",", $user["favs"]);
-                                        if (count($favs) == 1) {
-                                            if ($favs[0] == $data[$k]["expl_id"]) {
-                                                $class = "fas fa-bookmark";
-                                            }
+                                    if (isset($_SESSION["login"])) {
+                                        $user = GetUser($_SESSION["idUser"]);
+
+                                        if ($user["favs"] == "") {
+                                            $class = "far fa-bookmark";
                                         } else {
-                                            foreach ($favs as $kk => $vv) {
-                                                if ($favs[$kk] == $data[$k]["expl_id"]) {
+                                            $favs = explode(",", $user["favs"]);
+                                            if (count($favs) == 1) {
+                                                if ($favs[0] == $data[$k]["expl_id"]) {
                                                     $class = "fas fa-bookmark";
+                                                }
+                                            } else {
+                                                foreach ($favs as $kk => $vv) {
+                                                    if ($favs[$kk] == $data[$k]["expl_id"]) {
+                                                        $class = "fas fa-bookmark";
+                                                    }
                                                 }
                                             }
                                         }

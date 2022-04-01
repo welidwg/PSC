@@ -45,6 +45,11 @@ function GetEMPR($id)
     return $user;
     # code...
 }
+function GetNumRows($req)
+{
+    $connect = Connect();
+    return mysqli_num_rows(mysqli_query($connect, $req));
+}
 function GetUser($id)
 {
     $connect = Connect();

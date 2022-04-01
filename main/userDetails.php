@@ -37,6 +37,17 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                     <div style="text-align:center;"></div>
                     <form id="edit">
                         <div class="row" style="color: rgb(233,230,232);">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label" for="username" style="color: rgb(121,105,93);">
+                                        <strong>Code d'abonnement <i class="fas fa-lock"></i> &nbsp;</strong>
+                                    </label>
+                                    <input class="form-control" value="<?= $data["empr_cb"] ?>" type="text" id="code" placeholder="vide" name="code" style="" disabled="true">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row" style="color: rgb(233,230,232);">
                             <div class="col-md-6 col-sm-8">
                                 <div class="mb-3">
                                     <label class="form-label" for="username" style="color: rgb(121,105,93);">
@@ -78,8 +89,20 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                                     <label class="form-label" for="" style="color: rgb(121,105,93);">
                                         <strong>Ville</strong>
                                     </label>
-                                    <input disabled class="form-control" value="<?= $data["empr_ville"] ?>" type="text" id="tit4" placeholder="vide" name="tit4" style="">
+                                    <select name="ville" id="ville" class="form-control">
+                                        <option value="<?= $data["empr_ville"] ?>"><?= $data["empr_ville"] ?></option>
+                                        <?php
 
+                                        $vl = runQuery("SELECT DISTINCT(empr_ville) from empr where empr_ville!='" . $data["empr_ville"] . "' and empr_ville not like ''  order by empr_ville asc ");
+                                        foreach ($vl as $k1 => $v1) {
+                                        ?>
+                                            <option value="<?= $vl[$k1]["empr_ville"] ?>"><?= $vl[$k1]["empr_ville"] ?></option>
+                                        <?php
+                                            # code...
+                                        }
+
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                             <script>
@@ -90,8 +113,76 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                                     <label class="form-label" for="" style="color: rgb(121,105,93);">
                                         <strong>Pays</strong>
                                     </label>
-                                    <input disabled class="form-control" value="<?= $data["empr_pays"] ?>" type="text" id="tit4" placeholder="vide" name="tit4" style="">
+                                    <select name="pays" id="pays" class="form-control">
+                                        <option value="<?= $data["empr_pays"] ?>"><?= $data["empr_pays"] ?></option>
 
+                                        <?php
+
+                                        $vl = runQuery("SELECT DISTINCT(empr_pays) from empr where empr_pays != '" . $data["empr_pays"] . "' and empr_pays like '%ولاية%'  order by empr_pays asc ");
+                                        foreach ($vl as $k1 => $v1) {
+                                        ?>
+                                            <option value="<?= $vl[$k1]["empr_pays"] ?>"><?= $vl[$k1]["empr_pays"] ?></option>
+                                        <?php
+                                            # code...
+                                        }
+
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label" for="" style="color: rgb(122,106,94);font-size: 18px;font-family: Amiri, serif;">
+                                        <strong>Categorie</strong><br></label>
+                                    <select name="categ" id="categ" class="form-control">
+                                        <?php
+                                        $cat = mysqli_fetch_array(mysqli_query($connect, "SELECT * from empr_categ where id_categ_empr= " . $data['empr_categ'] . " "))["libelle"];
+                                        ?>
+                                        <option value="<?= $data["empr_categ"] ?>"><?= $cat ?></option>
+
+                                        <?php
+
+                                        $vl = runQuery("SELECT * from empr_categ where libelle != '" . $cat . "' order by libelle asc ");
+                                        foreach ($vl as $k1 => $v1) {
+                                        ?>
+                                            <option value="<?= $vl[$k1]["id_categ_empr"] ?>"><?= $vl[$k1]["libelle"] ?></option>
+                                        <?php
+                                            # code...
+                                        }
+
+                                        ?>
+                                    </select>
+                                    <script>
+                                        $(function() {
+
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label" for="Ref" style="color: rgb(122,106,94);font-size: 18px;font-family: Amiri, serif;">
+                                        <strong>Emplacement</strong><br></label>
+                                    <select name="emp" id="emp" class="form-control">
+                                        <?php
+                                        $emp1 = mysqli_fetch_array(mysqli_query($connect, "SELECT * from empr_codestat where idcode= " . $data['empr_codestat'] . " "));
+
+                                        ?>
+                                        <option value="<?= $emp1["idcode"] ?>"><?= $emp1["libelle"] ?></option>
+                                        <?php
+
+                                        $vl = runQuery("SELECT * from empr_codestat where idcode != " . $emp1['idcode'] . " order by libelle asc ");
+                                        foreach ($vl as $k1 => $v1) {
+                                        ?>
+                                            <option value="<?= $vl[$k1]["idcode"] ?>"><?= $vl[$k1]["libelle"] ?></option>
+                                        <?php
+                                            # code...
+                                        }
+
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +192,7 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                                     <label class="form-label" for="" style="color: rgb(121,105,93);">
                                         <strong>Telephone</strong>
                                     </label>
-                                    <input disabled class="form-control" value="<?= $data["empr_tel1"] ?>" type="text" id="tit4" placeholder="vide" name="tit4" style="">
+                                    <input class="form-control" value="<?= $data["empr_tel1"] ?>" type="text" id="tit4" placeholder="vide" name="tit4" style="">
 
                                 </div>
                             </div>
@@ -111,7 +202,20 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                                     <label class="form-label" for="" style="color: rgb(121,105,93);">
                                         <strong>Profession</strong>
                                     </label>
-                                    <input class="form-control" value="<?= $data["empr_prof"] ?>" type="text" id="" placeholder="vide" name="nbpage" style="">
+                                    <select name="prof" id="prof" class="form-control">
+                                        <option value="<?= $data["empr_prof"] ?>"><?= $data["empr_prof"] ?></option>
+
+                                        <?php
+                                        $pr = runQuery("SELECT DISTINCT(empr_prof) from empr where empr_prof!='" . $data["empr_prof"] . "' and empr_prof not like '' ");
+                                        foreach ($pr as $kk => $vv) {
+                                        ?>
+                                            <option value="<?= $pr[$kk]["empr_prof"] ?>"><?= $pr[$kk]["empr_prof"] ?></option>
+                                        <?php
+                                            # code...
+                                        }
+
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +225,7 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                                     <label class="form-label" for="" style="color: rgb(121,105,93);">
                                         <strong>Date d'adhésion</strong>
                                     </label>
-                                    <input disabled class="form-control" value="<?= $data["empr_date_adhesion"] ?>" type="text" id="tit4" placeholder="vide" name="tit4" style="">
+                                    <input class="form-control" value="<?= $data["empr_date_adhesion"] ?>" type="date" id="dateAbonnement" placeholder="vide" name="dateAbonnement" style="">
 
                                 </div>
                             </div>
@@ -129,12 +233,49 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                             <div class="col">
                                 <div class="mb-3">
                                     <label class="form-label" for="" style="color: rgb(121,105,93);">
-                                        <strong>Date d'expriation</strong>
+                                        <strong>Date d'expiration <i class="fas fa-lock"></i></strong>
                                     </label>
-                                    <input disabled class="form-control" value="<?= $data["empr_date_expiration"] ?>" type="text" id="tit4" placeholder="vide" name="tit4" style="">
+                                    <input disabled class="form-control" value="<?= $data["empr_date_expiration"] ?>" type="date" id="dateExp" placeholder="vide" name="dateExp" style="">
 
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label" for="Ref" style="color: rgb(122,106,94);font-size: 18px;font-family: Amiri, serif;">
+                                        <strong>Sexe</strong><br></label>
+                                    <select class="form-control" name="sexe" id="">
+                                        <option value="<?= $data["empr_sexe"] ?>"><?php
+                                                                                    ($data["empr_sexe"] == 1) ? print("Homme") : print("Femme");
+                                                                                    ?></option>
+
+                                        <?php
+
+                                        switch ($data["empr_sexe"]) {
+                                            case 1:
+                                                # code...
+                                                echo '
+                                        <option value="2">Femme</option>
+                                                
+                                                ';
+                                                break;
+                                            case 2:
+                                                echo '
+                                        <option value="1">Homme</option>
+                                                
+                                                ';
+                                                break;
+
+                                            default:
+                                                # code...
+                                                break;
+                                        } ?>
+
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
                         <input type="hidden" name="id_empr" value="<?= $emprID ?>">
 
@@ -144,13 +285,21 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                     </form>
                     <script>
                         $(function() {
-
+                            $("#prof").select2({
+                                theme: "bootstrap4"
+                            })
+                            $("#ville").select2({
+                                theme: "bootstrap4"
+                            })
+                            $("#pays").select2({
+                                theme: "bootstrap4"
+                            })
                             $("#edit").on("submit", (e) => {
                                 e.preventDefault()
                                 let form = $(this);
                                 $.ajax({
                                     type: "post",
-                                    url: "../Scripts/booksManager.php?edit",
+                                    url: "../Scripts/userManager.php?edit",
                                     data: $("#edit").serialize(),
                                     success: function(res) {
                                         if (res == 1) {
@@ -174,7 +323,7 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
         </div>
 
         <script>
-            let role = "<?= $role ?>"
+            /* let role = "<?= $role ?>"
 
             $(":input,select").prop("disabled", false)
 
@@ -182,7 +331,7 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                 $(":input,select").prop("disabled", true)
                 console.log(role);
 
-            }
+            }*/
         </script>
 
         </div>
