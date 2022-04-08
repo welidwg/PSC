@@ -16,7 +16,7 @@ if (isset($_GET["register"])) {
         if ($codeEx > 0) {
             echo 2;
         } else {
-            $sql = "INSERT INTO userAccounts (idUser,email,CodeEmpr,mpas) values($id,'$email','$code','$pass')";
+            $sql = "INSERT INTO userAccounts (idUser,email,CodeEmpr,mpas) values('$id','$email','$code','$pass')";
             if (mysqli_query($connect, $sql)) {
                 echo 1;
             } else {

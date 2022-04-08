@@ -7,8 +7,10 @@ $appName = "M-R-M |";
 if (isset($_SESSION["login"])) {
     $avatar = $_SESSION["avatar"];
     $id = $_SESSION["idUser"];
-    $empr = GetEMPR($id);
     $role = $_SESSION["role"];
+    if ($role == 0) {
+        $empr = GetEMPR($id);
+    }
     $usr = GetUser($id);
 }
 
@@ -124,14 +126,34 @@ if (isset($_SESSION["login"])) {
                         <li class="nav-item"><a class="nav-link" href="./login.php" style="color: rgb(43,42,41);"><i class="fas fa-sign-in-alt" style="color: rgb(43,42,41);"></i><span><span>Se connecter</span></span></a></li>
                         <li class="nav-item"><a class="nav-link" href="./register.php" style="color: rgb(43,42,41);"><i class="fas fa-user-plus" style="color: rgb(43,42,41);"></i><span>Créer un compte</span></a></li>
                     <?php } ?>
-                    <?php if (isset($_SESSION["login"]) && $_SESSION["role"] == 1) { ?>
+                    <?php if (isset($_SESSION["login"]) && ($role == 1 || $role == 2)) { ?>
                         <div class="dropdown-divider"></div>
                         <li class="nav-item"><a class="nav-link" href="./AjouterAdherant.php" style="color: rgb(43,42,41);"><i class="fas fa-user-plus" style="color: rgb(43,42,41);"></i><span>Ajouter un adhérant</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="./listeAdherant.php" style="color: rgb(43,42,41);"><i class="fas fa-users" style="color: rgb(43,42,41);"></i><span>Liste des adhérants</span></a></li>
                         <div class="dropdown-divider"></div>
-                        <li class="nav-item"><a class="nav-link" href="#" style="color: rgb(43,42,41);"><i class="fas fa-users-cog" style="color: rgb(43,42,41);"></i><span>Ajouter un utilisateur</span></a></li>
+                        <li class="nav-item" id="addBook"><a class="nav-link" style="color: rgb(43,42,41);cursor: pointer;"><i class="fas fa-plus" style="color: rgb(43,42,41);"></i><span>Ajouter un document</span></a></li>
+                        <script>
+                            $(function() {
+                                $("#addBook").on("click", (e) => {
+                                    alertify.prompt("Ajouter un document", "Veuillez d'abord ajouter la référence de document", "", (e, val) => {
+
+                                        if (val == "") {
+                                            alertify.error("Veuillez intoduire une référence")
+                                        } else {
+                                            window.location.href = `./AjouterDocument.php?ref=${val}`;
+                                        }
+                                    }, (e) => {}).set("type", "number")
+                                })
+                            });
+                        </script>
+                        <?php if ($role == 1) { ?>
+
+                            <li class="nav-item"><a class="nav-link" href="./AjouterUser.php" style="color: rgb(43,42,41);"><i class="fas fa-users-cog" style="color: rgb(43,42,41);"></i><span>Ajouter un utilisateur</span></a></li>
+
+                        <?php } ?>
 
                     <?php } ?>
+
 
 
 
@@ -158,7 +180,7 @@ if (isset($_SESSION["login"])) {
                                 <li class="nav-item"></li>
                             </ul>
                         </div>
-                        <?php if (isset($_SESSION["login"]) && $role != 1) { ?>
+                        <?php if (isset($_SESSION["login"]) && ($role != 1 && $role != 2)) { ?>
                             <div class="dropdown"><a class="dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="padding: 0px;color: #ef9c1f;font-weight: bold;"><img class="rounded-circle border rounded-0" style="width: 35px;height: 35px;margin: 0px;" src="<?php if ($usr["avatar"] != "") echo "../assets/img/avatars/" . $usr["avatar"];
                                                                                                                                                                                                                                                                                                 else echo "../assets/img/avatar.png"; ?>"> <?php $nom = explode(" ", $empr["empr_prenom"]);
                                                                                                                                                                                                                                                                                                                                             echo $nom[0] . " " .
@@ -174,7 +196,7 @@ if (isset($_SESSION["login"])) {
                                     <div class="dropdown-divider"></div><a class="dropdown-item" href="../Scripts/auth.php?Logout"><i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>Déconnexion</a>
                                 </div>
                             </div>
-                        <?php } else if (isset($_SESSION["login"]) && $role == 1) {
+                        <?php } else if (isset($_SESSION["login"]) && ($role == 1 || $role == 2)) {
                         ?>
                             <div class="dropdown">
                                 <a class="dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="padding: 0px;color: #ef9c1f;font-weight: bold;">

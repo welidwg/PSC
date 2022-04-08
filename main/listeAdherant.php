@@ -2,7 +2,7 @@
 $current = "biblio";
 require_once("./navigation.php");
 $connect = Connect();
-if (isset($_SESSION["login"]) && $role == 1) {
+if (isset($_SESSION["login"]) && ($role == 1 || $role == 2)) {
 
 ?>
 

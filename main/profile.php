@@ -87,7 +87,7 @@ if (isset($_SESSION["login"])) {
                                             <div class="col">
                                                 <div class="mb-3"><label class="form-label" for="email" style="color: rgb(121,105,93);font-family: Amiri, serif;font-size: 18px;font-weight: bold;"><strong>Adresse e-mail&nbsp;</strong></label><input class="form-control" value="<?= $_SESSION["email"] ?>" type="email" id="email" placeholder="user@example.com" name="email" style="background: rgb(247,246,246);"></div>
                                             </div>
-                                            <?php if ($role == 1) {
+                                            <?php if ($role == 1 || $role == 2) {
                                             ?>
                                                 <div class="col">
                                                     <div class="mb-3"><label class="form-label" for="" style="color: rgb(121,105,93);font-family: Amiri, serif;font-size: 18px;font-weight: bold;"><strong>Nom&nbsp;</strong></label><input class="form-control" value="<?= $usr["nom"] ?>" type="text" id="nom" placeholder="votre nom" name="nom" style="background: rgb(247,246,246);"></div>
@@ -256,6 +256,10 @@ if (isset($_SESSION["login"])) {
                                                             console.log(res);
 
                                                         }
+                                                    },
+                                                    error: (e) => {
+                                                        alertify.error(e.responseText);
+
                                                     }
                                                 });
                                             })

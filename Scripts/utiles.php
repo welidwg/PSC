@@ -42,7 +42,34 @@ function GetEMPR($id)
 {
     $connect = Connect();
     $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from empr where id_empr = $id"));
-    return $user;
+    if ($user) {
+        return $user;
+    } else {
+        return false;
+    }
+    # code...
+}
+
+function GetDocById($id)
+{
+    $connect = Connect();
+    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from empr where id_empr = $id"));
+    if ($user) {
+        return $user;
+    } else {
+        return false;
+    }
+    # code...
+}
+function GetDocByRef($ref)
+{
+    $connect = Connect();
+    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from empr where empr_cb = '$ref'"));
+    if ($user) {
+        return $user;
+    } else {
+        return false;
+    }
     # code...
 }
 function GetNumRows($req)
@@ -53,7 +80,7 @@ function GetNumRows($req)
 function GetUser($id)
 {
     $connect = Connect();
-    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from userAccounts where idUser = $id"));
+    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from userAccounts where idUser = '$id'"));
     return $user;
     # code...
 }

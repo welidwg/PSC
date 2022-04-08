@@ -10,9 +10,14 @@ if (isset($_GET["edit"])) {
     $tit2 =
         mysqli_real_escape_string($connect, $_POST["tit2"]);
     $tit3 =
-        mysqli_real_escape_string($connect, $_POST["tit3"]);;
+        mysqli_real_escape_string($connect, $_POST["tit3"]);
     $tit4 =
-        mysqli_real_escape_string($connect, $_POST["tit4"]);;
+        mysqli_real_escape_string($connect, $_POST["tit4"]);
+    $isbn = $_POST["isbn"];
+    $ref = $_POST["ref"];
+    $date_parution = date("Y-m-d", strtotime($_POST["dateParution"]));
+    $prix = $_POST["prix"];
+
     $author = $_POST["auteur"];
     $location = $_POST["location"];
     $type = $_POST["type"];
@@ -26,9 +31,12 @@ if (isset($_GET["edit"])) {
     tit4='$tit4',
     ed1_id=$author,
     npages='$npage',
-    statut=$statut
+    statut=$statut,
+    code='$isbn',
+    date_parution='$date_parution',
+    prix='$prix'
      where notice_id=$notice ";
-    $sql2 = "UPDATE exemplaires SET expl_typdoc=$type,expl_section=$section,expl_statut=$statut,expl_location=$location where expl_id=$expl";
+    $sql2 = "UPDATE exemplaires SET expl_typdoc=$type,expl_section=$section,expl_statut=$statut,expl_location=$location,expl_cb='$ref' where expl_id=$expl";
     if (mysqli_query($connect, $sql1)) {
         if (mysqli_query($connect, $sql2)) {
             echo "1";
@@ -44,7 +52,7 @@ if (isset($_GET["edit"])) {
     $expl_id = $_POST["expl_id"];
     $exemplaire = mysqli_fetch_array(mysqli_query($connect, "SELECT * from exemplaires where expl_id = $expl_id"));
     $idUser = $_SESSION["idUser"];
-    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from userAccounts where idUser = $idUser"));
+    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from userAccounts where idUser = '$idUser'"));
     $fav = "";
     if ($user["favs"] == "") {
         $fav = $expl_id;
@@ -82,7 +90,7 @@ if (isset($_GET["edit"])) {
         }
     }
 
-    if (mysqli_query($connect, "UPDATE userAccounts SET favs='$fav' where idUser=$idUser")) {
+    if (mysqli_query($connect, "UPDATE userAccounts SET favs='$fav' where idUser='$idUser'")) {
         echo $action;
     } else {
         echo mysqli_error($connect);

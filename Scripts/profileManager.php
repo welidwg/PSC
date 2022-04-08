@@ -17,18 +17,18 @@ if (isset($_GET["info"])) {
     } else {
         $newPass = $_SESSION["mpas"];
     }
-    if ($role != 1) {
+    if ($role == 0) {
         $nom = $_POST["nom"];
         $prenom = $_POST["prenom"];
         $prof = $_POST["prof"];
     }
     if ($email == $_SESSION['email']) {
-        if ($role == 1) {
+        if ($role == 1 || $role == 2) {
             $nom = $_POST["nom"];
 
-            $r2 = "UPDATE userAccounts SET nom='$nom',mpas='$newPass' where idUser=$id ";
+            $r2 = "UPDATE userAccounts SET nom='$nom',mpas='$newPass' where idUser='$id' ";
         } else {
-            $r2 = "UPDATE userAccounts SET mpas='$newPass' where idUser=$id ";
+            $r2 = "UPDATE userAccounts SET mpas='$newPass' where idUser='$id' ";
         }
     } else {
         $checkMail = checkEmail($email);
@@ -36,11 +36,11 @@ if (isset($_GET["info"])) {
             return "0";
         } else {
             if ($role == 0) {
-                $r2 = "UPDATE userAccounts SET mpas='$newPass',Email='$email' where idUser=$id  ";
+                $r2 = "UPDATE userAccounts SET mpas='$newPass',Email='$email' where idUser='$id ' ";
             } else {
                 $nom = $_POST["nom"];
 
-                $r2 = "UPDATE userAccounts SET nom='$nom',mpas='$newPass',Email='$email' where idUser=$id  ";
+                $r2 = "UPDATE userAccounts SET nom='$nom',mpas='$newPass',Email='$email' where idUser='$id'  ";
             }
         }
     }
@@ -65,6 +65,12 @@ if (isset($_GET["info"])) {
     $pays = $_POST["pays"];
     $ville = $_POST["ville"];
     $tel = $_POST["tel"];
+    $checkTel = GetNumRows("SELECT * from empr where empr_tel1='$tel' && id_empr!=$id");
+    if ($checkTel == 1) {
+        http_response_code(500);
+        echo "Téléphone déjà utilisé";
+        exit();
+    }
     $sql = "UPDATE empr SET empr_adr1='$address',empr_tel1='$tel',empr_ville='$ville',empr_pays='$pays' where id_empr=$id";
     if (mysqli_query($connect, $sql)) {
         echo "1";
@@ -80,7 +86,7 @@ if (isset($_GET["info"])) {
         unlink("../assets/img/avatars/" . $old);
     }
     if (move_uploaded_file($file_tmp = $_FILES["avatar"]["tmp_name"], "../assets/img/avatars/" . $file_name)) {
-        if (mysqli_query($connect, "UPDATE userAccounts SET avatar='$file_name' where idUser=$id")) {
+        if (mysqli_query($connect, "UPDATE userAccounts SET avatar='$file_name' where idUser='$id'")) {
             $_SESSION["avatar"] = $file_name;
             echo "1";
         } else {

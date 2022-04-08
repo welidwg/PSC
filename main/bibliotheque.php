@@ -47,10 +47,14 @@ $connect = Connect();
                                                                                         # code...
                                                                                         break;
                                                                                     case 4:
-                                                                                        echo "Location";
+                                                                                        echo "ISBN";
                                                                                         # code...
                                                                                         break;
                                                                                     case 5:
+                                                                                        echo "Location";
+                                                                                        # code...
+                                                                                        break;
+                                                                                    case 6:
                                                                                         echo "Type";
                                                                                         # code...
                                                                                         break;
@@ -66,37 +70,52 @@ $connect = Connect();
                                             case '1':
                                                 echo ' <option value="2">Auteur</option>
                                         <option value="3">Référence</option>
-                                        <option value="4">Location</option>
-                                        <option value="5">Type</option>';
+                                        <option value="4">ISBN</option>
+                                      <option value="5">Location</option>
+                                        <option value="6">Type</option>';
                                                 # code...
                                                 break;
                                             case '2':
                                                 echo '
                                         <option value="1">Titre</option>
                                         <option value="3">Référence</option>
-                                        <option value="4">Location</option>
-                                        <option value="5">Type</option>';
+                                        <option value="4">ISBN</option>
+                                        <option value="5">Location</option>
+                                        <option value="6">Type</option>';
                                                 break;
                                             case '3':
                                                 echo '
                                         <option value="1">Titre</option>
                                         <option value="2">Auteur</option>
-                                        <option value="4">Location</option>
-                                        <option value="5">Type</option>';
+                                        <option value="4">ISBN</option>
+                                        <option value="5">Location</option>
+                                        <option value="6">Type</option>';
                                                 break;
                                             case '4':
                                                 echo '
                                         <option value="1">Titre</option>
                                         <option value="2">Auteur</option>
                                         <option value="3">Référence</option>
-                                        <option value="5">Type</option>';
+                                        <option value="5">Location</option>
+                                        <option value="6">Type</option>';
                                                 break;
                                             case '5':
                                                 echo '
                                         <option value="1">Titre</option>
                                         <option value="2">Auteur</option>
                                         <option value="3">Référence</option>
-                                        <option value="4">Location</option>';
+                                        <option value="4">ISBN</option>
+                                        <option value="6">Type</option>
+                                        ';
+                                                break;
+                                            case '6':
+                                                echo '
+                                        <option value="1">Titre</option>
+                                        <option value="2">Auteur</option>
+                                        <option value="3">Référence</option>
+                                        <option value="4">ISBN</option>
+                                        <option value="5">Location</option>
+                                        ';
                                                 break;
                                             default:
                                                 # code...
@@ -107,8 +126,9 @@ $connect = Connect();
                                         <option value="1">Titre</option>
                                         <option value="2">Auteur</option>
                                         <option value="3">Référence</option>
-                                        <option value="4">Location</option>
-                                        <option value="5">Type</option>
+                                        <option value="4">ISBN</option>
+                                        <option value="5">Location</option>
+                                        <option value="6">Type</option>
                                     <?php
                                     } ?>
 
@@ -147,12 +167,19 @@ $connect = Connect();
                             );
                             break;
                         case 3:
-                            $data = runQuery("SELECT * from notices N , exemplaires E,docs_location D,authors A ,docs_section S WHERE N.notice_id=E.expl_notice and E.expl_location=D.idlocation and N.ed1_id=A.author_id  and E.expl_section=S.idsection and expl_cb = '$val'   Limit $premier,$parPage ");
+                            $data = runQuery("SELECT * from notices N , exemplaires E,docs_location D,authors A ,docs_section S WHERE N.notice_id=E.expl_notice and E.expl_location=D.idlocation and N.ed1_id=A.author_id  and E.expl_section=S.idsection and expl_cb like '%$val%'   Limit $premier,$parPage ");
                             $nbArticles = mysqli_num_rows(
-                                mysqli_query($connect, "SELECT * from notices N , exemplaires E,docs_location D,authors A ,docs_section S WHERE N.notice_id=E.expl_notice and E.expl_location=D.idlocation and N.ed1_id=A.author_id  and E.expl_section=S.idsection and expl_cb = '$val'  ")
+                                mysqli_query($connect, "SELECT * from notices N , exemplaires E,docs_location D,authors A ,docs_section S WHERE N.notice_id=E.expl_notice and E.expl_location=D.idlocation and N.ed1_id=A.author_id  and E.expl_section=S.idsection and expl_cb like '%$val%'  ")
                             );
                             break;
                         case 4:
+                            $data = runQuery("SELECT * from notices N , exemplaires E,docs_location D,authors A ,docs_section S WHERE N.notice_id=E.expl_notice and E.expl_location=D.idlocation and N.ed1_id=A.author_id  and E.expl_section=S.idsection and code like '%$val%'   Limit $premier,$parPage ");
+                            $nbArticles = mysqli_num_rows(
+                                mysqli_query($connect, "SELECT * from notices N , exemplaires E,docs_location D,authors A ,docs_section S WHERE N.notice_id=E.expl_notice and E.expl_location=D.idlocation and N.ed1_id=A.author_id  and E.expl_section=S.idsection and code like '%$val%' ")
+                            );
+                            break;
+
+                        case 5:
                             if (!CheckAr($val)) {
                                 $val = translate($val, "fr", "ar");
                             }
@@ -164,7 +191,7 @@ $connect = Connect();
                             );
 
                             break;
-                        case 5:
+                        case 6:
                             $data = runQuery("SELECT * from notices N , exemplaires E,docs_location D,authors A , docs_type T,docs_section S WHERE N.notice_id=E.expl_notice and E.expl_location=D.idlocation and N.ed1_id=A.author_id and T.idtyp_doc=E.expl_typdoc and E.expl_section=S.idsection  and tdoc_libelle like '%$val%' Limit $premier,$parPage ");
                             $nbArticles = mysqli_num_rows(
                                 mysqli_query($connect, "SELECT * from notices N , exemplaires E,docs_location D,authors A , docs_type T,docs_section S WHERE N.notice_id=E.expl_notice and E.expl_location=D.idlocation and N.ed1_id=A.author_id and T.idtyp_doc=E.expl_typdoc and E.expl_section=S.idsection  and tdoc_libelle like '%$val%' ")
@@ -240,7 +267,7 @@ $connect = Connect();
                                                                     ?></td>
                                         <td style="color: #7a6a5e;"><?= $data[$k]["author_rejete"] . " " . $data[$k]["author_name"]  ?></td>
                                         <td><?= $data[$k]["location_libelle"] ?></td>
-                                        <td style="color: #7a6a5e;"><?= $data[$k]["index_l"] ?></td>
+                                        <td style="color: #7a6a5e;"><?php ($data[$k]["index_matieres"] == "") ? print("inconnue") : print($data[$k]["index_matieres"]) ?></td>
                                         <td style="color: #7a6a5e;"><?= $data[$k]["section_libelle"] ?></td>
                                         <td class="d-flex" style="justify-content: space-between;border:unset">
                                             <a target="_blank" class="text-dark bg-transparent " style="border:none" href="./bookDetails.php?explID=<?= $data[$k]["expl_id"] ?>&noticeID=<?= $data[$k]["notice_id"] ?>"><i class="fa fa-eye"></i></a>

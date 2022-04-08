@@ -2,7 +2,7 @@
 
 $current = "details";
 require_once("./navigation.php");
-if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 1) {
+if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && ($_SESSION["role"] == 1 || $_SESSION["role"] == 2)) {
     $emprID = $_GET["idUser"];
     $connect = Connect();
     $data = mysqli_fetch_array(mysqli_query($connect, "SELECT * from empr WHERE id_empr = $emprID "));
@@ -45,7 +45,15 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                                     <input class="form-control" value="<?= $data["empr_cb"] ?>" type="text" id="code" placeholder="vide" name="code" style="" disabled="true">
                                 </div>
                             </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label" for="Ref" style="color: rgb(122,106,94);font-size: 18px;font-family: Amiri, serif;">
+                                        <strong>Email</strong><br></label>
+                                    <input <?php ($data["empr_mail"] != "") ? print("readonly") : print(""); ?> value="<?= $data["empr_mail"] ?>" class="form-control" type="email" id="email" placeholder="vide" name="email" style="">
 
+                                </div>
+
+                            </div>
                         </div>
                         <div class="row" style="color: rgb(233,230,232);">
                             <div class="col-md-6 col-sm-8">
@@ -53,7 +61,7 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                                     <label class="form-label" for="username" style="color: rgb(121,105,93);">
                                         <strong>Nom&nbsp;</strong>
                                     </label>
-                                    <input class="form-control" value="<?= $data["empr_nom"] ?>" type="text" id="tit1" placeholder="vide" name="tit1" style="">
+                                    <input class="form-control" value="<?= $data["empr_nom"] ?>" type="text" id="nom" placeholder="vide" name="nom" style="">
                                 </div>
                             </div>
                             <div class="col-md-6 col-sm-8">
@@ -61,7 +69,7 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                                     <label class="form-label" for="" style="color: rgb(121,105,93);">
                                         <strong>Prenom&nbsp;</strong>
                                     </label>
-                                    <input class="form-control" value="<?= $data["empr_prenom"] ?>" type="text" id="tit2" placeholder="vide" name="tit2" style="">
+                                    <input class="form-control" value="<?= $data["empr_prenom"] ?>" type="text" id="prenom" placeholder="vide" name="prenom" style="">
                                 </div>
                             </div>
                         </div>
@@ -71,7 +79,7 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                                     <label class="form-label" for="" style="color: rgb(121,105,93);">
                                         <strong>Adresse&nbsp;</strong>
                                     </label>
-                                    <input class="form-control" value="<?= $data["empr_adr1"] ?>" type="text" id="tit3" placeholder="vide" name="tit3" style="">
+                                    <input class="form-control" value="<?= $data["empr_adr1"] ?>" type="text" id="adresse" placeholder="vide" name="adresse" style="">
                                 </div>
                             </div>
                             <div class="col-md-6 col-sm-8">
@@ -79,7 +87,7 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                                     <label class="form-label" for="" style="color: rgb(121,105,93);">
                                         <strong>Code Postal&nbsp;</strong>
                                     </label>
-                                    <input class="form-control" value="<?= $data["empr_cp"] ?>" type="text" id="tit4" placeholder="vide" name="tit4" style="">
+                                    <input class="form-control" value="<?= $data["empr_cp"] ?>" type="text" id="CodeP" placeholder="vide" name="CodeP" style="">
                                 </div>
                             </div>
                         </div>
@@ -192,7 +200,7 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                                     <label class="form-label" for="" style="color: rgb(121,105,93);">
                                         <strong>Telephone</strong>
                                     </label>
-                                    <input class="form-control" value="<?= $data["empr_tel1"] ?>" type="text" id="tit4" placeholder="vide" name="tit4" style="">
+                                    <input class="form-control" value="<?= $data["empr_tel1"] ?>" type="text" id="tel" placeholder="vide" name="tel" style="">
 
                                 </div>
                             </div>
@@ -275,13 +283,20 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                                     </select>
                                 </div>
                             </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label" for="" style="color: rgb(121,105,93);">
+                                        <strong>Age <i class="fas fa-lock"></i></strong>
+                                    </label>
+                                    <input disabled class="form-control" value="<?= date("Y") - $data["empr_year"] ?>" type="text" id="age" placeholder="vide" name="age" style="">
 
-                        </div>
-                        <input type="hidden" name="id_empr" value="<?= $emprID ?>">
+                                </div>
+                            </div>
+                            <input type="hidden" name="id_empr" value="<?= $emprID ?>">
 
 
 
-                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit" style="background: rgb(240,183,72);border-color: rgb(243,185,73);">Enregistrer</button></div>
+                            <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit" style="background: rgb(240,183,72);border-color: rgb(243,185,73);">Enregistrer</button></div>
                     </form>
                     <script>
                         $(function() {
@@ -296,22 +311,22 @@ if (isset($_GET["idUser"]) && isset($_SESSION["login"]) && $_SESSION["role"] == 
                             })
                             $("#edit").on("submit", (e) => {
                                 e.preventDefault()
-                                let form = $(this);
                                 $.ajax({
                                     type: "post",
                                     url: "../Scripts/userManager.php?edit",
                                     data: $("#edit").serialize(),
+                                    dataType: "JSON",
                                     success: function(res) {
-                                        if (res == 1) {
-                                            alertify.success("Enregistrée !");
-                                            setTimeout(() => {
-                                                window.location.reload()
-                                            }, 700);
-                                        } else {
-                                            alertify.error("Erreur de serveur ! ");
-                                            console.log(res);
-                                        }
+                                        alertify.success(res);
+                                        setTimeout(() => {
+                                            window.location.reload();
+                                        }, 700);
 
+
+
+                                    },
+                                    error: (e) => {
+                                        alertify.error(e.responseJSON);
                                     }
                                 });
                             })

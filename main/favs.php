@@ -125,7 +125,7 @@ if (isset($_SESSION["login"])) {
                                 } else {
                                     ?>
                                     <tr>
-                                        <td>Vous n'avez pas encore ajouter des favories</td>
+                                        <td>Vous n'avez pas encore ajouté des favories</td>
                                     </tr>
 
                                 <?php

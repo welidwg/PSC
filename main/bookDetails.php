@@ -44,34 +44,50 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
                             <div class="col-md-6 col-sm-8">
                                 <div class="mb-3">
                                     <label class="form-label" for="username" style="color: rgb(121,105,93);">
-                                        <strong>Titre 1&nbsp;</strong>
+                                        <strong>ISBN&nbsp;</strong>
                                     </label>
-                                    <input class="form-control" value="<?= $data["tit1"] ?>" type="text" id="tit1" placeholder="vide" name="tit1" style="">
+                                    <input class="form-control" value="<?= $data["code"] ?>" type="text" id="isbn" placeholder="vide" name="isbn" style="">
                                 </div>
                             </div>
                             <div class="col-md-6 col-sm-8">
                                 <div class="mb-3">
                                     <label class="form-label" for="" style="color: rgb(121,105,93);">
-                                        <strong>Titre 2&nbsp;</strong>
+                                        <strong>Référence&nbsp;</strong>
                                     </label>
+                                    <input class="form-control" value="<?= $data["expl_cb"] ?>" type="text" id="ref" placeholder="vide" name="ref" style="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="form-label" for="" style="color: rgb(121,105,93);">
+                                <strong>Titres&nbsp;</strong>
+                            </label>
+                        </div>
+                        <div class="row" style="color: rgb(233,230,232);">
+
+                            <div class="col" id="tit1Cont">
+                                <div class="mb-3">
+
+                                    <input class="form-control" value="<?= $data["tit1"] ?>" type="text" id="tit1" placeholder="vide" name="tit1" style="">
+                                </div>
+                            </div>
+                            <div class="col" id="tit2Cont">
+                                <div class="mb-3">
+
                                     <input class="form-control" value="<?= $data["tit2"] ?>" type="text" id="tit2" placeholder="vide" name="tit2" style="">
                                 </div>
                             </div>
                         </div>
                         <div class="row" style="color: rgb(233,230,232);">
-                            <div class="col-md-6 col-sm-8">
+                            <div class="col" id="tit3Cont">
                                 <div class="mb-3">
-                                    <label class="form-label" for="" style="color: rgb(121,105,93);">
-                                        <strong>Titre 3&nbsp;</strong>
-                                    </label>
+
                                     <input class="form-control" value="<?= $data["tit3"] ?>" type="text" id="tit3" placeholder="vide" name="tit3" style="">
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-8">
+                            <div class="col" id="tit4Cont">
                                 <div class="mb-3">
-                                    <label class="form-label" for="" style="color: rgb(121,105,93);">
-                                        <strong>Titre 4&nbsp;</strong>
-                                    </label>
+
                                     <input class="form-control" value="<?= $data["tit4"] ?>" type="text" id="tit4" placeholder="vide" name="tit4" style="">
                                 </div>
                             </div>
@@ -102,8 +118,12 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
                             </div>
                             <script>
                                 $(function() {
-                                    $('#auteur').select2();
-                                    $('#location').select2();
+                                    $('#auteur').select2({
+                                        theme: "bootstrap4"
+                                    });
+                                    $('#location').select2({
+                                        theme: "bootstrap4"
+                                    });
 
 
                                 });
@@ -215,32 +235,40 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="color: rgb(233,230,232);">
-                            <div class="col-md-6 col-sm-8">
-                                <div class="mb-3">
-                                    <label class="form-label" for="" style="color: rgb(121,105,93);">
-                                        <strong>Date Parution&nbsp;</strong>
-                                    </label>
-                                    <input class="form-control" disabled value="<?= $data["date_parution"] ?>" type="text"  placeholder="vide"  style="">
+                        <?php if (isset($_SESSION["login"]) && ($role == 1 || $role == 2)) {
+                        ?>
+
+
+
+
+                            <div class="row" style="color: rgb(233,230,232);">
+                                <div class="col-md-6 col-sm-8">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="" style="color: rgb(121,105,93);">
+                                            <strong>Date Parution&nbsp;</strong>
+                                        </label>
+                                        <input name="dateParution" class="form-control" disabled value="<?= $data["date_parution"] ?>" type="text" placeholder="vide" style="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-8">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="" style="color: rgb(121,105,93);">
+                                            <strong>Prix&nbsp;</strong>
+                                        </label>
+                                        <input class="form-control" value="<?= $data["prix"] ?>" type="text" id="prix" placeholder="vide" name="prix" style="">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-8">
-                                <div class="mb-3">
-                                    <label class="form-label" for="" style="color: rgb(121,105,93);">
-                                        <strong>Titre 4&nbsp;</strong>
-                                    </label>
-                                    <input class="form-control" value="<?= $data["tit4"] ?>" type="text" id="tit4" placeholder="vide" name="tit4" style="">
-                                </div>
-                            </div>
-                        </div>
+                        <?php
+                        } ?>
                         <input type="hidden" name="id_notice" value="<?= $notice ?>">
                         <input type="hidden" name="id_expl" value="<?= $expl ?>">
 
 
 
-                        <?php if ($role == 1) : ?>
+                        <?php if ($role == 1 || $role == 2) { ?>
                             <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit" style="background: rgb(240,183,72);border-color: rgb(243,185,73);">Enregistrer</button></div>
-                        <?php endif; ?>
+                        <?php } ?>
                     </form>
                     <script>
                         $(function() {
@@ -275,6 +303,20 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
 
         <script>
             let role = "<?= $role ?>"
+            let tit2 = $("#tit2").val();
+            let tit3 = $("#tit3").val();
+            let tit4 = $("#tit4").val();
+            if (role == 0 || role == "") {
+                if (tit2 == "") {
+                    $("#tit2Cont").fadeOut();
+                }
+                if (tit3 == "") {
+                    $("#tit3Cont").fadeOut();
+                }
+                if (tit4 == "") {
+                    $("#tit4Cont").fadeOut();
+                }
+            }
 
             $(":input,select").prop("disabled", false)
 
