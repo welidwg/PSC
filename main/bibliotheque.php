@@ -24,12 +24,14 @@ $connect = Connect();
             <div class="card-body" style="background: #f9fafa;">
                 <div class="row">
 
-                    <div class="col-md-12 col-lg-9 mx-auto" style="height: 59px;">
+                    <div class="col-md-12 col-lg-12 mx-auto" style="height: 59px;">
+                        <label for="search" class="d-block d-md-none" style="width: 110px;">Filtrer par </label>
 
-                        <form method="get" class="d-flex user">
-                            <label for="search" class="" style="width: 110px;">Filtrer par </label>
+                        <form method="get" class="d-flex   user">
 
-                            <div class="dropdown " style="width: 10vw;">
+                            <label for="search" class="d-none d-md-block" style="width: 110px;">Filtrer par </label>
+
+                            <div class="dropdown " style="width: 20vh;">
                                 <select id="search" class="form-control w-100" style="background-color: #f2b849;color:white" name="search" id="">
                                     <?php if (isset($_GET["search"])) {
                                     ?>

@@ -30,7 +30,7 @@ if (isset($_SESSION["login"]) && ($role == 1 || $role == 2)) {
                             <form method="get" class="d-flex user">
                                 <label for="search" class="" style="width: 110px;">Filtrer par </label>
 
-                                <div class="dropdown " style="width: 10vw;">
+                                <div class="dropdown " style="width: 20vh;">
                                     <select id="search" class="form-control w-100" style="background-color: #f2b849;color:white" name="search" id="">
                                         <?php if (isset($_GET["search"])) {
                                         ?>

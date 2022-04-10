@@ -16,15 +16,15 @@ require_once("./navigation.php");
 
 <body>
 
-    <div class="container-fluid" style="padding: 100px;">
+    <div class="container-fluid" style="padding: 20px;">
 
 
         <div class="row mb-3">
 
-            <div class="col-lg-12">
+            <div class="col-md-6 col-sm-12 mx-auto ">
 
                 <div class="row">
-                    <div class="col">
+                    <div class="col-md-12 col-sm-12">
                         <div class="card shadow mb-3">
                             <div class="card-header py-3" style="background: #f7f6f6;">
                                 <p style="color: rgb(236,155,33);font-family: Amiri, serif;font-size: 18px;text-align: center;"><strong>Ajouter un Admin </strong></p>

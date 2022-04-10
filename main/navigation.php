@@ -121,8 +121,8 @@ if (isset($_SESSION["login"])) {
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="./index.php" style="color: rgb(43,42,41);"><i class="fa fa-home" style="color: rgb(43,42,41);"></i><span>Accueil</span></a> </li>
                     <?php if (isset($_SESSION["login"]) && ($role == 1 || $role == 2)) { ?>
-                        <li class="nav-item" id="addBook"><a class="nav-link" style="color: rgb(43,42,41);cursor: pointer;"><i class="fas fa-plus" style="color: rgb(43,42,41);"></i><span>Ajouter un document</span></a></li>
-                        <li class="nav-item" id="addBook"><a class="nav-link" style="color: rgb(43,42,41);cursor: pointer;" href="./plus.php"><i class="fas fa-wrench" style="color: rgb(43,42,41);"></i><span>Plus d'options</span></a></li>
+                        <li class="nav-item" id="addBook1"><a class="nav-link" style="color: rgb(43,42,41);cursor: pointer;"><i class="fas fa-plus" style="color: rgb(43,42,41);"></i><span>Ajouter un document</span></a></li>
+                        <li class="nav-item"><a class="nav-link" style="color: rgb(43,42,41);cursor: pointer;" href="./plus.php"><i class="fas fa-wrench" style="color: rgb(43,42,41);"></i><span>Plus d'options</span></a></li>
 
                     <?php } ?>
                     <li class="nav-item"><a class="nav-link" href="./bibliotheque.php" style="color: rgb(43,42,41);"><i class="fas fa-book-open" style="color: rgb(43,42,41);"></i><span>Bibilothèque</span></a></li>
@@ -140,7 +140,7 @@ if (isset($_SESSION["login"])) {
 
                         <script>
                             $(function() {
-                                $("#addBook").on("click", (e) => {
+                                $("#addBook1").on("click", (e) => {
 
 
 
@@ -188,10 +188,59 @@ if (isset($_SESSION["login"])) {
                                 <li class="nav-item"></li>
                                 <li class="nav-item dropdown no-arrow">
                                     <ul class="navbar-nav">
-                                        <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none" style="padding: 8px;font-size: 2.5vh;"><a class="nav-link" href="./index.php" style="font-size: 2.4vh;">Accueil</a></li>
-                                        <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none" style="padding: 8px;font-size: 2.5vh;"><a class="nav-link" href="./bibliotheque.php" style="font-size: 2.4vh;">Bibliothèque</a></li>
-                                        <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none" style="padding: 8px;font-size: 2.5vh;"><a class="nav-link" href="./login.php" style="font-size: 2.4vh;">Connexion</a></li>
-                                        <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none" style="padding: 8px;font-size: 2.5vh;"><a class="nav-link" href="./register.php" style="font-size: 2.4vh;">Créer un compte</a></li>
+                                        <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none"><a class="nav-link" href="./index.php" style="color: rgb(43,42,41);"><i class="fa fa-home" style="color: rgb(43,42,41);"></i><span>Accueil</span></a> </li>
+                                        <?php if (isset($_SESSION["login"]) && ($role == 1 || $role == 2)) { ?>
+                                            <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none" id="addBook"><a class="nav-link" style="color: rgb(43,42,41);cursor: pointer;"><i class="fas fa-plus" style="color: rgb(43,42,41);"></i><span>Ajouter un document</span></a></li>
+                                            <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none" id="addBook"><a class="nav-link" style="color: rgb(43,42,41);cursor: pointer;" href="./plus.php"><i class="fas fa-wrench" style="color: rgb(43,42,41);"></i><span>Plus d'options</span></a></li>
+
+                                        <?php } ?>
+                                        <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none"><a class="nav-link" href="./bibliotheque.php" style="color: rgb(43,42,41);"><i class="fas fa-book-open" style="color: rgb(43,42,41);"></i><span>Bibilothèque</span></a></li>
+
+
+                                        <?php if (!isset($_SESSION["login"])) { ?>
+                                            <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none"><a class="nav-link" href="./login.php" style="color: rgb(43,42,41);"><i class="fas fa-sign-in-alt" style="color: rgb(43,42,41);"></i><span><span>Se connecter</span></span></a></li>
+                                            <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none"><a class="nav-link" href="./register.php" style="color: rgb(43,42,41);"><i class="fas fa-user-plus" style="color: rgb(43,42,41);"></i><span>Créer un compte</span></a></li>
+                                        <?php } ?>
+                                        <?php if (isset($_SESSION["login"]) && ($role == 1 || $role == 2)) { ?>
+                                            <div class="dropdown-divider" style="border-color: #f2b849;"></div>
+                                            <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none"><a class="nav-link" href="./AjouterAdherant.php" style="color: rgb(43,42,41);"><i class="fas fa-user-plus" style="color: rgb(43,42,41);"></i><span>Ajouter un adhérant</span></a></li>
+                                            <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none"><a class="nav-link" href="./listeAdherant.php" style="color: rgb(43,42,41);"><i class="fas fa-users" style="color: rgb(43,42,41);"></i><span>Liste des adhérants</span></a></li>
+                                            <div class="dropdown-divider" style="border-color: #f2b849;"></div>
+
+                                            <script>
+                                                $(function() {
+                                                    $("#addBook").on("click", (e) => {
+
+
+
+                                                        alertify.prompt("Ajouter un document", "Veuillez introduire le ISBN ou l'identifiant unique du document:", "", (e, val) => {
+
+                                                            if (val == "") {
+                                                                e.cancel = true;
+                                                                alertify.error("Ne laissez pas le champ vide s'il vous plaît")
+                                                            } else {
+                                                                window.location.href = `./AjouterDocument.php?isbn=${val}`;
+                                                            }
+                                                        }, (e) => {}).set({
+                                                            "type": "text",
+                                                            "placeholder": "hh",
+                                                            labels: {
+                                                                ok: 'Continuer',
+                                                                cancel: "Annuler"
+                                                            }
+                                                        })
+                                                    })
+
+                                                });
+                                            </script>
+                                            <?php if ($role == 1) { ?>
+
+                                                <li class="nav-item d-print-none d-sm-inline d-md-inline d-lg-none d-xl-none d-xxl-none"><a class="nav-link" href="./AjouterUser.php" style="color: rgb(43,42,41);"><i class="fas fa-users-cog" style="color: rgb(43,42,41);"></i><span>Ajouter un utilisateur</span></a></li>
+
+                                            <?php } ?>
+
+                                        <?php } ?>
+
                                     </ul>
                                 </li>
                                 <li class="nav-item"></li>

@@ -23,12 +23,12 @@ if (isset($_GET["isbn"])) {
 
     <body>
 
-        <div class="container-fluid" style="padding: 100px;">
+        <div class="container-fluid" style="padding: 10px;">
 
 
             <div class="row mb-3">
 
-                <div class="col-lg-12">
+                <div class="col-lg-10 mx-auto">
 
 
                     <div class="row">
