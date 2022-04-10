@@ -6,7 +6,7 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
     $expl = $_GET["explID"];
     $notice = $_GET["noticeID"];
     $connect = Connect();
-    $data = mysqli_fetch_array(mysqli_query($connect, "SELECT * from notices N , exemplaires E,docs_location D,authors A , docs_type T,docs_section S,docs_statut DS WHERE N.notice_id=$notice and E.expl_id=$expl and N.notice_id=E.expl_notice and E.expl_location=D.idlocation and N.ed1_id=A.author_id and T.idtyp_doc=E.expl_typdoc and E.expl_section=S.idsection and N.statut=DS.idstatut "));
+    $data = mysqli_fetch_array(mysqli_query($connect, "SELECT * from notices N , exemplaires E,docs_location D,authors A , docs_type T,docs_section S,docs_statut DS,collections COL WHERE N.notice_id=$notice and E.expl_id=$expl and N.notice_id=E.expl_notice and E.expl_location=D.idlocation and N.ed1_id=A.author_id and T.idtyp_doc=E.expl_typdoc and E.expl_section=S.idsection and N.statut=DS.idstatut and COL.collection_id=N.coll_id "));
     if (!isset($_SESSION["login"])) {
         $role = "";
     }
@@ -235,6 +235,65 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
                                 </div>
                             </div>
                         </div>
+                        <div class="row" style="color: rgb(233,230,232);">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label" for="" style="color: rgb(121,105,93);">
+                                        <strong>Collection</strong>
+                                    </label>
+                                    <select class="form-control" name="collection" id="collection">
+                                        <?php
+
+                                        $coll_id = $data["coll_id"];
+
+                                        ?>
+                                        <option value="<?= $coll_id ?>"><?= $data["collection_name"] ?></option>
+
+                                        <?php
+                                        $coll = runQuery("SELECT * from collections where collection_id!=$coll_id");
+                                        foreach ($coll as $kk3 => $value3) {
+                                        ?>
+                                            <option value="<?= $coll[$kk3]["collection_id"] ?>"><?= $coll[$kk3]["collection_name"] ?></option>
+                                        <?php
+                                        } ?>
+                                    </select>
+                                    <script>
+                                        $('#collection').select2({
+                                            theme: "bootstrap4"
+                                        })
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label" for="" style="color: rgb(121,105,93);">
+                                        <strong>Matière</strong>
+                                    </label>
+                                    <select class="form-control" name="matiere" id="matiere">
+                                        <?php
+
+                                        $mat = $data["index_matieres"];
+
+                                        ?>
+                                        <option value="<?= $mat ?>"><?= $mat ?></option>
+
+                                        <?php
+                                        $matier = runQuery("SELECT DISTINCT (index_matieres) from notices");
+                                        foreach ($matier as $kk4 => $value4) {
+                                        ?>
+                                            <option value="<?= $matier[$kk4]["index_matieres"] ?>"><?= $matier[$kk4]["index_matieres"] ?></option>
+                                        <?php
+                                        } ?>
+                                    </select>
+                                    <script>
+                                        $('#matiere').select2({
+                                            theme: "bootstrap4"
+                                        })
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
                         <?php if (isset($_SESSION["login"]) && ($role == 1 || $role == 2)) {
                         ?>
 
@@ -242,7 +301,7 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
 
 
                             <div class="row" style="color: rgb(233,230,232);">
-                                <div class="col-md-6 col-sm-8">
+                                <div class="col-md-6 col-sm-12">
                                     <div class="mb-3">
                                         <label class="form-label" for="" style="color: rgb(121,105,93);">
                                             <strong>Date Parution&nbsp;</strong>
@@ -250,7 +309,7 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
                                         <input name="dateParution" class="form-control" disabled value="<?= $data["date_parution"] ?>" type="text" placeholder="vide" style="">
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-sm-8">
+                                <div class="col-md-6 col-sm-12">
                                     <div class="mb-3">
                                         <label class="form-label" for="" style="color: rgb(121,105,93);">
                                             <strong>Prix&nbsp;</strong>
@@ -261,17 +320,73 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
                             </div>
                         <?php
                         } ?>
-                        <input type="hidden" name="id_notice" value="<?= $notice ?>">
-                        <input type="hidden" name="id_expl" value="<?= $expl ?>">
+                        <input type="hidden" id="id_notice" name="id_notice" value="<?= $notice ?>">
+                        <input type="hidden" id="id_expl" name="id_expl" value="<?= $expl ?>">
 
 
 
                         <?php if ($role == 1 || $role == 2) { ?>
-                            <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit" style="background: rgb(240,183,72);border-color: rgb(243,185,73);">Enregistrer</button></div>
+                            <div class="row">
+                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit" style="background: rgb(240,183,72);border-color: rgb(243,185,73);">Enregistrer</button></div>
+                                <div class="mb-3"><button class="btn btn-danger btn-sm" type="button" id="delete" style="border-color: rgb(243,185,73);">Supprimer</button></div>
+                            </div>
                         <?php } ?>
                     </form>
                     <script>
                         $(function() {
+                            $("#delete").on("click", (e) => {
+                                alertify.confirm("Suppression d'un document", "Vous êtes sûr de supprimer l'exemplaire  <?= $data['tit1'] ?>", (e) => {
+                                    alertify.prompt("Confirmer", "Vous voulez supprimer définitivement ce document ?<br>Tapez Oui ou bien Non", "", (ev, val) => {
+                                        val = val.toLowerCase();
+                                        if (val == "oui" || val == "non") {
+
+
+                                            $.ajax({
+                                                type: "post",
+                                                url: "../Scripts/booksManager.php?Delete",
+                                                data: {
+                                                    idNotice: $("#id_notice").val(),
+                                                    idExpl: $("#id_expl").val(),
+                                                    test: val
+                                                },
+                                                dataType: "json",
+                                                success: function(res) {
+                                                    alertify.success(res.msg)
+                                                    console.log(res);
+
+                                                    setTimeout(() => {
+                                                        window.location.href = "./bibliotheque.php"
+                                                    }, 700);
+
+                                                },
+                                                error: (e) => {
+                                                    alertify.error(e.responseJSON.msg);
+                                                    console.log(e.responseJSON.error);
+
+                                                }
+                                            });
+                                        } else {
+                                            ev.cancel = true;
+                                            alertify.error("Veuillez tapez Oui ou bien Non ! ")
+                                        }
+
+                                    }, (ev) => {}).set({
+
+                                        labels: {
+                                            ok: 'Confirmer',
+                                            cancel: "Annuler"
+                                        }
+                                    })
+
+                                }, () => {}).set({
+
+                                    labels: {
+                                        ok: 'Confirmer',
+                                        cancel: "Annuler"
+                                    }
+                                })
+
+                            })
 
                             $("#edit").on("submit", (e) => {
                                 e.preventDefault()
@@ -280,16 +395,17 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
                                     type: "post",
                                     url: "../Scripts/booksManager.php?edit",
                                     data: $("#edit").serialize(),
+                                    dataType: "json",
                                     success: function(res) {
-                                        if (res == 1) {
-                                            alertify.success("Enregistrée !");
-                                            setTimeout(() => {
-                                                window.location.reload()
-                                            }, 700);
-                                        } else {
-                                            alertify.error("Erreur de serveur ! ");
-                                            console.log(res);
-                                        }
+                                        alertify.success(res.msg)
+                                        setTimeout(() => {
+                                            window.location.reload()
+                                        }, 700);
+
+                                    },
+                                    error: (e) => {
+                                        alertify.error(e.responseJSON.msg);
+                                        console.log(e.responseJSON.error);
 
                                     }
                                 });

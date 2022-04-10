@@ -58,6 +58,7 @@
 
   var scrollToTop = document.querySelector('.scroll-to-top');
   
+  
   if (scrollToTop) {
     
     // Scroll to top button appear

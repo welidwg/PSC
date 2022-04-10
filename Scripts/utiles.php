@@ -72,6 +72,53 @@ function GetDocByRef($ref)
     }
     # code...
 }
+function GetNoticeById($id)
+{
+    $connect = Connect();
+    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from notices where notice_id = $id"));
+    if ($user) {
+        return $user;
+    } else {
+        return false;
+    }
+    # code...
+}
+function GetNoticeByISBN($isbn)
+{
+    $connect = Connect();
+    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from notices where code = '$isbn'"));
+    if ($user) {
+        return $user;
+    } else {
+        return false;
+    }
+    # code...
+}
+function GetAuthorById($id)
+{
+    $connect = Connect();
+    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from authors where author_id = $id"));
+    if ($user) {
+        return $user;
+    } else {
+        return false;
+    }
+   
+   
+    # code...
+}
+
+function GetCollectionById($id)
+{
+    $connect = Connect();
+    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from collections where collection_id = $id"));
+    if ($user) {
+        return $user;
+    } else {
+        return false;
+    }
+    # code...
+}
 function GetNumRows($req)
 {
     $connect = Connect();

@@ -132,18 +132,31 @@ if (isset($_SESSION["login"])) {
                         <li class="nav-item"><a class="nav-link" href="./listeAdherant.php" style="color: rgb(43,42,41);"><i class="fas fa-users" style="color: rgb(43,42,41);"></i><span>Liste des adhérants</span></a></li>
                         <div class="dropdown-divider"></div>
                         <li class="nav-item" id="addBook"><a class="nav-link" style="color: rgb(43,42,41);cursor: pointer;"><i class="fas fa-plus" style="color: rgb(43,42,41);"></i><span>Ajouter un document</span></a></li>
+
                         <script>
                             $(function() {
                                 $("#addBook").on("click", (e) => {
-                                    alertify.prompt("Ajouter un document", "Veuillez d'abord ajouter la référence de document", "", (e, val) => {
+
+
+
+                                    alertify.prompt("Ajouter un document", "Veuillez introduire le ISBN ou l'identifiant unique du document:", "", (e, val) => {
 
                                         if (val == "") {
-                                            alertify.error("Veuillez intoduire une référence")
+                                            e.cancel = true;
+                                            alertify.error("Ne laissez pas le champ vide s'il vous plaît")
                                         } else {
-                                            window.location.href = `./AjouterDocument.php?ref=${val}`;
+                                            window.location.href = `./AjouterDocument.php?isbn=${val}`;
                                         }
-                                    }, (e) => {}).set("type", "number")
+                                    }, (e) => {}).set({
+                                        "type": "text",
+                                        "placeholder": "hh",
+                                        labels: {
+                                            ok: 'Continuer',
+                                            cancel: "Annuler"
+                                        }
+                                    })
                                 })
+
                             });
                         </script>
                         <?php if ($role == 1) { ?>

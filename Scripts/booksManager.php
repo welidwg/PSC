@@ -15,6 +15,18 @@ if (isset($_GET["edit"])) {
         mysqli_real_escape_string($connect, $_POST["tit4"]);
     $isbn = $_POST["isbn"];
     $ref = $_POST["ref"];
+    $checkRef = GetNumRows("SELECT * from exemplaires where expl_cb='$ref' and expl_id!=$expl");
+    $checkISBN = GetNumRows("SELECT * from notices where code='$isbn' and notice_id!=$notice");
+    if ($checkRef > 0) {
+        http_response_code(500);
+        echo json_encode(array("msg" => "Cette référence est déjà utilisée!"));
+        exit();
+    }
+    if ($checkISBN > 0) {
+        http_response_code(500);
+        echo json_encode(array("msg" => "Ce ISBN est déjà utilisé!"));
+        exit();
+    }
     $date_parution = date("Y-m-d", strtotime($_POST["dateParution"]));
     $prix = $_POST["prix"];
 
@@ -24,6 +36,9 @@ if (isset($_GET["edit"])) {
     $npage = mysqli_real_escape_string($connect, $_POST["nbpage"]);
     $section = $_POST["section"];
     $statut = $_POST["statut"];
+    $collection = $_POST["collection"];
+    $matiere = mysqli_real_escape_string($connect, $_POST["matiere"]);
+
     $sql1 = "UPDATE notices SET
     tit1='$tit1',
     tit2='$tit2',
@@ -34,18 +49,26 @@ if (isset($_GET["edit"])) {
     statut=$statut,
     code='$isbn',
     date_parution='$date_parution',
-    prix='$prix'
-     where notice_id=$notice ";
+    prix='$prix',
+    coll_id=$collection,
+    index_matieres='$matiere'
+    where notice_id=$notice ";
     $sql2 = "UPDATE exemplaires SET expl_typdoc=$type,expl_section=$section,expl_statut=$statut,expl_location=$location,expl_cb='$ref' where expl_id=$expl";
     if (mysqli_query($connect, $sql1)) {
         if (mysqli_query($connect, $sql2)) {
-            echo "1";
+            http_response_code(200);
+            echo json_encode(array("msg" => "Enregitrée ! "));
+            exit();
         } else {
+            http_response_code(500);
+            echo json_encode(array("msg" => "Erreur de serveur", "error" => mysqli_error($connect)));
             mysqli_rollback($connect);
-            echo mysqli_error($connect);
+            exit();
         }
     } else {
-        echo mysqli_error($connect);
+        http_response_code(500);
+        echo json_encode(array("msg" => "Erreur de serveur", "error" => mysqli_error($connect)));
+        exit();
     }
     //echo $npage;
 } else if (isset($_GET["Fav"])) {
@@ -95,4 +118,129 @@ if (isset($_GET["edit"])) {
     } else {
         echo mysqli_error($connect);
     }
+} else if (isset($_GET["AddDoc"])) {
+    $idnotice = $_POST["notice"];
+    $prix = $_POST["prix"];
+    $create = date("Y-m-d H:i:s");
+
+    if ($idnotice == "") {
+        $isbn = $_POST["isbn"];
+        $author = $_POST["auteur"];
+        $location = $_POST["location"];
+        $date_parution = date("Y-m-d", strtotime($_POST["date_parution"]));
+        $collection = $_POST["collection"];
+        $taille = $_POST["taille"];
+        $matiere = mysqli_real_escape_string($connect, $_POST["matiere"]);
+        $year = $_POST["year"];
+
+
+
+        $tit1 = mysqli_real_escape_string($connect, $_POST["tit1"]);
+        $tit2 =
+            mysqli_real_escape_string($connect, $_POST["tit2"]);
+        $tit3 =
+            mysqli_real_escape_string($connect, $_POST["tit3"]);
+        $tit4 =
+            mysqli_real_escape_string($connect, $_POST["tit4"]);
+        $npage
+            = mysqli_real_escape_string($connect, $_POST["npages"]);
+        $sql1 = "INSERT INTO notices ( tit1,tit2,tit3,tit4,ed1_id,coll_id,year,code,npages,size,index_matieres,prix,create_date,update_date,date_parution )
+         values('$tit1','$tit2','$tit3','$tit4','$author',$collection,'$year','$isbn','$npage','$taille','$matiere','$prix','$create','$create','$date_parution')";
+
+        if (mysqli_query($connect, $sql1)) {
+            $idnotice = mysqli_insert_id($connect);
+        } else {
+            http_response_code(500);
+            echo json_encode(array("msg" => "Erreur de serveur !", "error" => mysqli_error($connect)));
+            exit();
+        }
+    }
+    $ref = $_POST["ref"];
+    $checkRef = GetNumRows("SELECT * from exemplaires where expl_cb='$ref'");
+    if ($checkRef > 0) {
+        http_response_code(500);
+        echo json_encode(array("msg" => "Référence déjà existante !"));
+        exit();
+    }
+    $location = $_POST["location"];
+    $cote = $_POST["cote"];
+    $type = $_POST["type"];
+    $section = $_POST["section"];
+    $statut = $_POST["statut"];
+    $codestat = $_POST["codestat"];
+    $sql2 = "INSERT INTO exemplaires(expl_cb,expl_notice,expl_typdoc,expl_cote,expl_section,expl_statut,expl_location,expl_prix,create_date,update_date,expl_codestat)
+     values ('$ref',$idnotice,$type,'$cote',$section,$statut,$location,'$prix','$create','$create',$codestat)";
+
+    if (mysqli_query($connect, $sql2)) {
+        http_response_code(200);
+
+        echo json_encode(array("msg" => "Ajout avec succès !"));
+    } else {
+        http_response_code(500);
+
+
+        echo json_encode(array("msg" => "Erreur de serveur!", "error" => mysqli_error($connect)));
+    }
+} else if (isset($_GET["Delete"])) {
+    $idnotice = $_POST["idNotice"];
+    $idExpl = $_POST["idExpl"];
+    $test = $_POST["test"];
+    $newFavs = "";
+    $users = runQuery("SELECT * from userAccounts where favs like '%$idExpl%'");
+    if ($users) {
+        foreach ($users as $k => $v) {
+            $newFavs = "";
+            $favs = explode(",", $users[$k]["favs"]);
+            foreach ($favs as $kk => $vv) {
+
+                if ($favs[$kk] == $idExpl) {
+                    unset($favs[$kk]);
+                }
+            }
+
+            foreach ($favs as $kk1 => $vv1) {
+                if ($newFavs == "") {
+                    $newFavs = $favs[$kk1];
+                } else {
+                    $newFavs .= "," . $favs[$kk1];
+                }
+            }
+
+            if (!mysqli_query($connect, "UPDATE userAccounts SET favs = '$newFavs' where idUser='" . $users[$k]["idUser"] . "'")) {
+                http_response_code(500);
+                echo json_encode(array("msg" => "Erreur de serveur!", "error" => mysqli_error($connect) . "<br>" . $newFavs));
+                exit();
+            }
+        }
+    }
+
+    $sql2 = "";
+    switch ($test) {
+        case 'oui':
+            $sql = "DELETE FROM notices where notice_id=$idnotice";
+            $sql2 = "DELETE FROM exemplaires where expl_notice=$idnotice";
+            break;
+        case 'non':
+            $sql = "DELETE FROM exemplaires where expl_id=$idExpl";
+            break;
+
+        default:
+            break;
+    }
+    if (!mysqli_query($connect, $sql)) {
+        http_response_code(500);
+        echo json_encode(array("msg" => "Erreur de serveur!", "error" => mysqli_error($connect)));
+
+        exit();
+    }
+    if ($sql2 != "") {
+        if (!mysqli_query($connect, $sql2)) {
+            http_response_code(500);
+            echo json_encode(array("msg" => "Erreur de serveur!", "error" => mysqli_error($connect)));
+
+            exit();
+        }
+    }
+    http_response_code(200);
+    echo json_encode(array("msg" => "Supression réussite!"));
 }
