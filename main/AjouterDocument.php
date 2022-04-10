@@ -49,6 +49,9 @@ if (isset($_GET["isbn"])) {
                                                     dataType: "json",
                                                     success: function(res) {
                                                         alertify.success(res.msg);
+                                                        setTimeout(() => {
+                                                            window.location.reload();
+                                                        }, 700);
                                                     },
                                                     error: (e) => {
                                                         alertify.error(e.responseJSON.msg);
@@ -121,18 +124,27 @@ if (isset($_GET["isbn"])) {
                                                         <strong>Auteur</strong>
                                                         <br></label>
                                                     <?php if ($notice != "") {
-                                                        $author = GetAuthorById($notice["ed1_id"]);
+                                                        if ($notice["ed1_id"] != 0) {
+
+
+                                                            $author = GetAuthorById($notice["ed1_id"]);
                                                     ?>
-                                                        <input class="form-control" type="text" name="" value="<?= $author["author_name"] . " " . $author["author_rejete"] ?>" disabled id="">
+                                                            <input class="form-control" type="text" name="" value="<?= $author["author_name"] . " " . $author["author_rejete"] ?>" disabled id="">
 
-                                                    <?php
+                                                        <?php
 
+                                                        } else {
+                                                        ?>
+                                                            <input class="form-control" type="text" name="" value="inconnue" disabled id="">
+
+                                                        <?php
+                                                        }
                                                     } else {
-                                                    ?>
+                                                        ?>
 
                                                         <select class="form-control" data-show-subtext="true" data-live-search="true" name="auteur" id="auteur">
                                                             <?php if ($check == 0) { ?>
-                                                                <option value="0">Aucun</option>
+                                                                <option value="1">Aucun</option>
                                                             <?php } ?>
 
 

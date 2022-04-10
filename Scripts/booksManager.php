@@ -219,6 +219,42 @@ if (isset($_GET["edit"])) {
         case 'oui':
             $sql = "DELETE FROM notices where notice_id=$idnotice";
             $sql2 = "DELETE FROM exemplaires where expl_notice=$idnotice";
+            $expls = runQuery("SELECT * from exemplaires where expl_notice=$idnotice");
+            if ($expls) {
+                foreach ($expls as $k1 => $v1) {
+                    $users1 = runQuery("SELECT * from userAccounts where favs like '%" . $expls[$k1]["expl_id"] . "%'");
+                    if ($users1) {
+                        foreach ($users1 as $k => $v) {
+                            $newFavs = "";
+                            $favs = explode(",", $users1[$k]["favs"]);
+                            foreach ($favs as $kk => $vv) {
+
+                                if ($favs[$kk] == $expls[$k1]["expl_id"]) {
+                                    unset($favs[$kk]);
+                                }
+                            }
+
+                            foreach ($favs as $kk1 => $vv1) {
+                                if ($newFavs == "") {
+                                    $newFavs = $favs[$kk1];
+                                } else {
+                                    $newFavs .= "," . $favs[$kk1];
+                                }
+                            }
+                            http_response_code(500);
+
+
+                            
+                        if (!mysqli_query($connect, "UPDATE userAccounts SET favs = '$newFavs' where idUser='" . $users1[$k]["idUser"] . "'")) {
+                            http_response_code(500);
+                            echo json_encode(array("msg" => "Erreur de serveur!", "error" => mysqli_error($connect)));
+                            exit();
+                            break;
+                        }
+                        }
+                    }
+                }
+            }
             break;
         case 'non':
             $sql = "DELETE FROM exemplaires where expl_id=$idExpl";

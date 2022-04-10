@@ -217,11 +217,11 @@ $connect = Connect();
                     <table class="table my-0" id="dataTable">
                         <thead>
                             <tr style="color: rgb(43,42,41);">
-                                <th style="color: #7a6a5e;">Reference</th>
+                                <td style="color: #7a6a5e;"><strong>ISBN/Identifiant Unique</strong></td>
+                                <th style="color: #7a6a5e;">Référence</th>
                                 <th style="color: #7a6a5e;">Titres de livre</th>
                                 <th style="color: #7a6a5e;">Auteur</th>
                                 <th style="color: #7a6a5e;">Location</th>
-                                <th style="color: #7a6a5e;">categorie</th>
                                 <th style="color: #7a6a5e;">section</th>
                                 <th style="color: rgb(122,106,94);">Action</th>
                             </tr>
@@ -258,7 +258,9 @@ $connect = Connect();
 
                             ?>
                                     <tr>
-                                        <td style="color: #7a6a5e;"><?= "#" . $data[$k]["expl_cb"] ?> </td>
+                                        <td style="color: #7a6a5e;"><?= "#" . $data[$k]["code"] ?> </td>
+
+                                        <td style="color: #7a6a5e;"><?= $data[$k]["expl_cb"] ?> </td>
                                         <td style="color: #7a6a5e;"><?php
                                                                     ($data[$k]["tit1"] != "") ? print ("<i class='fa fa-circle' style='font-size:4px'></i>  " . $data[$k]["tit1"]) . "<br>" : print("");
                                                                     ($data[$k]["tit2"] != "") ? print ("<i class='fa fa-circle' style='font-size:4px'></i>  " . $data[$k]["tit2"]) . "<br>" : print("");
@@ -267,7 +269,6 @@ $connect = Connect();
                                                                     ?></td>
                                         <td style="color: #7a6a5e;"><?= $data[$k]["author_rejete"] . " " . $data[$k]["author_name"]  ?></td>
                                         <td><?= $data[$k]["location_libelle"] ?></td>
-                                        <td style="color: #7a6a5e;"><?php ($data[$k]["index_matieres"] == "") ? print("inconnue") : print($data[$k]["index_matieres"]) ?></td>
                                         <td style="color: #7a6a5e;"><?= $data[$k]["section_libelle"] ?></td>
                                         <td class="d-flex" style="justify-content: space-between;border:unset">
                                             <a target="_blank" class="text-dark bg-transparent " style="border:none" href="./bookDetails.php?explID=<?= $data[$k]["expl_id"] ?>&noticeID=<?= $data[$k]["notice_id"] ?>"><i class="fa fa-eye"></i></a>
@@ -325,11 +326,11 @@ $connect = Connect();
                         </tbody>
                         <tfoot style="color: rgb(43,42,41);">
                             <tr>
-                                <td style="color: #7a6a5e;"><strong>Reference</strong></td>
+                                <td style="color: #7a6a5e;"><strong>ISBN/Identifiant Unique</strong></td>
+                                <td style="color: #7a6a5e;"><strong>Référence</strong></td>
                                 <td><strong style="color: #7a6a5e;">Titres de livre</strong></td>
                                 <td><strong style="color: #7a6a5e;">Auteur</strong></td>
                                 <td><strong style="color: #7a6a5e;">Location</strong></td>
-                                <td><strong style="color: #7a6a5e;">Categorie</strong></td>
                                 <td><strong style="color: #7a6a5e;">Section</strong></td>
                                 <td style="color: rgb(122,106,94);"><strong>Action</strong><br></td>
                             </tr>

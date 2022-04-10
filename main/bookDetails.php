@@ -6,7 +6,7 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
     $expl = $_GET["explID"];
     $notice = $_GET["noticeID"];
     $connect = Connect();
-    $data = mysqli_fetch_array(mysqli_query($connect, "SELECT * from notices N , exemplaires E,docs_location D,authors A , docs_type T,docs_section S,docs_statut DS,collections COL WHERE N.notice_id=$notice and E.expl_id=$expl and N.notice_id=E.expl_notice and E.expl_location=D.idlocation and N.ed1_id=A.author_id and T.idtyp_doc=E.expl_typdoc and E.expl_section=S.idsection and N.statut=DS.idstatut and COL.collection_id=N.coll_id "));
+    $data = mysqli_fetch_array(mysqli_query($connect, "SELECT * from notices N , exemplaires E,docs_location D,authors A , docs_type T,docs_section S,docs_statut DS WHERE N.notice_id=$notice and E.expl_id=$expl and N.notice_id=E.expl_notice and E.expl_location=D.idlocation and N.ed1_id=A.author_id and T.idtyp_doc=E.expl_typdoc and E.expl_section=S.idsection and N.statut=DS.idstatut "));
     if (!isset($_SESSION["login"])) {
         $role = "";
     }
@@ -245,9 +245,17 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
                                         <?php
 
                                         $coll_id = $data["coll_id"];
+                                        $collection = GetCollectionById($coll_id);
+                                        if (count($collection) != 0) {
 
+                                            $coll
+                                                = runQuery("SELECT * from collections where collection_id!=$coll_id");
+                                        } else {
+                                            $coll
+                                                = runQuery("SELECT * from collections");
+                                        }
                                         ?>
-                                        <option value="<?= $coll_id ?>"><?= $data["collection_name"] ?></option>
+                                        <?= (count($collection) == 0) ? print('<option value="0">Aucune</option>') : "" ?>
 
                                         <?php
                                         $coll = runQuery("SELECT * from collections where collection_id!=$coll_id");
@@ -270,13 +278,23 @@ if (isset($_GET["explID"]) && isset($_GET["noticeID"])) {
                                     <label class="form-label" for="" style="color: rgb(121,105,93);">
                                         <strong>Matière</strong>
                                     </label>
+                                    <?php
+
+                                    $mat = $data["index_matieres"];
+
+                                    ?>
                                     <select class="form-control" name="matiere" id="matiere">
-                                        <?php
 
-                                        $mat = $data["index_matieres"];
+                                        <option value="<?= $mat ?>">
+                                            <?php if ($mat == "" && $mat == 0) {
 
-                                        ?>
-                                        <option value="<?= $mat ?>"><?= $mat ?></option>
+                                            ?>
+                                                Aucune
+                                            <?php } else {
+                                                echo $mat;
+                                            } ?>
+
+                                        </option>
 
                                         <?php
                                         $matier = runQuery("SELECT DISTINCT (index_matieres) from notices");

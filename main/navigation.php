@@ -23,7 +23,7 @@ if (isset($_SESSION["login"])) {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amiri&amp;display=swap">
     <link rel="stylesheet" href="../assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="../assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/fa/css/all.min.css">
     <link rel="stylesheet" href="../assets/fonts/fontawesome5-overrides.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="../assets/css/untitled.css">
@@ -112,7 +112,7 @@ if (isset($_SESSION["login"])) {
                 });
             });
         </script>
-        <nav class="navbar navbar-dark shadow-lg d-none d-md-none d-lg-flex align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background: #eaeaeb;">
+        <nav class="navbar navbar-dark shadow-lg d-flex d-md-flex d-lg-flex align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 toggled" style="background: #eaeaeb;">
             <div class="container-fluid d-flex flex-column p-0" id="navFix">
                 <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">
                     <div class="sidebar-brand-icon rotate-n-15"><img class="rounded border shadow-sm d-lg-flex align-items-lg-center" src="../assets/img/logobiblio[black].png" style="width: 40px;transform: rotate(15deg) skew(0deg);"></div>
@@ -120,18 +120,23 @@ if (isset($_SESSION["login"])) {
                 </a>
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="./index.php" style="color: rgb(43,42,41);"><i class="fa fa-home" style="color: rgb(43,42,41);"></i><span>Accueil</span></a> </li>
+                    <?php if (isset($_SESSION["login"]) && ($role == 1 || $role == 2)) { ?>
+                        <li class="nav-item" id="addBook"><a class="nav-link" style="color: rgb(43,42,41);cursor: pointer;"><i class="fas fa-plus" style="color: rgb(43,42,41);"></i><span>Ajouter un document</span></a></li>
+                        <li class="nav-item" id="addBook"><a class="nav-link" style="color: rgb(43,42,41);cursor: pointer;" href="./plus.php"><i class="fas fa-wrench" style="color: rgb(43,42,41);"></i><span>Plus d'options</span></a></li>
 
+                    <?php } ?>
                     <li class="nav-item"><a class="nav-link" href="./bibliotheque.php" style="color: rgb(43,42,41);"><i class="fas fa-book-open" style="color: rgb(43,42,41);"></i><span>Bibilothèque</span></a></li>
+
+
                     <?php if (!isset($_SESSION["login"])) { ?>
                         <li class="nav-item"><a class="nav-link" href="./login.php" style="color: rgb(43,42,41);"><i class="fas fa-sign-in-alt" style="color: rgb(43,42,41);"></i><span><span>Se connecter</span></span></a></li>
                         <li class="nav-item"><a class="nav-link" href="./register.php" style="color: rgb(43,42,41);"><i class="fas fa-user-plus" style="color: rgb(43,42,41);"></i><span>Créer un compte</span></a></li>
                     <?php } ?>
                     <?php if (isset($_SESSION["login"]) && ($role == 1 || $role == 2)) { ?>
-                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-divider" style="border-color: #f2b849;"></div>
                         <li class="nav-item"><a class="nav-link" href="./AjouterAdherant.php" style="color: rgb(43,42,41);"><i class="fas fa-user-plus" style="color: rgb(43,42,41);"></i><span>Ajouter un adhérant</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="./listeAdherant.php" style="color: rgb(43,42,41);"><i class="fas fa-users" style="color: rgb(43,42,41);"></i><span>Liste des adhérants</span></a></li>
-                        <div class="dropdown-divider"></div>
-                        <li class="nav-item" id="addBook"><a class="nav-link" style="color: rgb(43,42,41);cursor: pointer;"><i class="fas fa-plus" style="color: rgb(43,42,41);"></i><span>Ajouter un document</span></a></li>
+                        <div class="dropdown-divider" style="border-color: #f2b849;"></div>
 
                         <script>
                             $(function() {
@@ -206,7 +211,8 @@ if (isset($_SESSION["login"])) {
                                         Mes Favories
                                     </a>
 
-                                    <div class="dropdown-divider"></div><a class="dropdown-item" href="../Scripts/auth.php?Logout"><i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>Déconnexion</a>
+                                    <div class="dropdown-divider" style="border-color: #f2b849;"></div>
+                                    <a class="dropdown-item" href="../Scripts/auth.php?Logout"><i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>Déconnexion</a>
                                 </div>
                             </div>
                         <?php } else if (isset($_SESSION["login"]) && ($role == 1 || $role == 2)) {
@@ -225,7 +231,7 @@ if (isset($_SESSION["login"])) {
                                         <i class="fas fa-book-reader" style="margin-right: 5px;width: 13px;"></i>
                                         Mes Favories
                                     </a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item" href="../Scripts/auth.php?Logout"><i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>Déconnexion</a>
+                                    <div class="dropdown-divider" style="color:red;background-color: red;border-bottom: 1px solid #ef9c1f;"></div><a class="dropdown-item" href="../Scripts/auth.php?Logout"><i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>Déconnexion</a>
                                 </div>
                             </div>
                         <?php
