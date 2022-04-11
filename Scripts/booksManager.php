@@ -75,7 +75,7 @@ if (isset($_GET["edit"])) {
     $expl_id = $_POST["expl_id"];
     $exemplaire = mysqli_fetch_array(mysqli_query($connect, "SELECT * from exemplaires where expl_id = $expl_id"));
     $idUser = $_SESSION["idUser"];
-    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from userAccounts where idUser = '$idUser'"));
+    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from useraccounts where idUser = '$idUser'"));
     $fav = "";
     if ($user["favs"] == "") {
         $fav = $expl_id;
@@ -113,7 +113,7 @@ if (isset($_GET["edit"])) {
         }
     }
 
-    if (mysqli_query($connect, "UPDATE userAccounts SET favs='$fav' where idUser='$idUser'")) {
+    if (mysqli_query($connect, "UPDATE useraccounts SET favs='$fav' where idUser='$idUser'")) {
         echo $action;
     } else {
         echo mysqli_error($connect);
@@ -186,7 +186,7 @@ if (isset($_GET["edit"])) {
     $idExpl = $_POST["idExpl"];
     $test = $_POST["test"];
     $newFavs = "";
-    $users = runQuery("SELECT * from userAccounts where favs like '%$idExpl%'");
+    $users = runQuery("SELECT * from useraccounts where favs like '%$idExpl%'");
     if ($users) {
         foreach ($users as $k => $v) {
             $newFavs = "";
@@ -206,7 +206,7 @@ if (isset($_GET["edit"])) {
                 }
             }
 
-            if (!mysqli_query($connect, "UPDATE userAccounts SET favs = '$newFavs' where idUser='" . $users[$k]["idUser"] . "'")) {
+            if (!mysqli_query($connect, "UPDATE useraccounts SET favs = '$newFavs' where idUser='" . $users[$k]["idUser"] . "'")) {
                 http_response_code(500);
                 echo json_encode(array("msg" => "Erreur de serveur!", "error" => mysqli_error($connect) . "<br>" . $newFavs));
                 exit();
@@ -222,7 +222,7 @@ if (isset($_GET["edit"])) {
             $expls = runQuery("SELECT * from exemplaires where expl_notice=$idnotice");
             if ($expls) {
                 foreach ($expls as $k1 => $v1) {
-                    $users1 = runQuery("SELECT * from userAccounts where favs like '%" . $expls[$k1]["expl_id"] . "%'");
+                    $users1 = runQuery("SELECT * from useraccounts where favs like '%" . $expls[$k1]["expl_id"] . "%'");
                     if ($users1) {
                         foreach ($users1 as $k => $v) {
                             $newFavs = "";
@@ -245,7 +245,7 @@ if (isset($_GET["edit"])) {
 
 
                             
-                        if (!mysqli_query($connect, "UPDATE userAccounts SET favs = '$newFavs' where idUser='" . $users1[$k]["idUser"] . "'")) {
+                        if (!mysqli_query($connect, "UPDATE useraccounts SET favs = '$newFavs' where idUser='" . $users1[$k]["idUser"] . "'")) {
                             http_response_code(500);
                             echo json_encode(array("msg" => "Erreur de serveur!", "error" => mysqli_error($connect)));
                             exit();

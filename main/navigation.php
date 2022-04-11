@@ -114,8 +114,9 @@ if (isset($_SESSION["login"])) {
         </script>
         <nav class="navbar navbar-dark shadow-lg d-flex d-md-flex d-lg-flex align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 toggled" style="background: #eaeaeb;">
             <div class="container-fluid d-flex flex-column p-0" id="navFix">
-                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="index.html">
-                    <div class="sidebar-brand-icon rotate-n-15"><img class="rounded border shadow-sm d-lg-flex align-items-lg-center" src="../assets/img/logobiblio[black].png" style="width: 40px;transform: rotate(15deg) skew(0deg);"></div>
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="./index.php">
+                    <div class=" sidebar-brand-icon rotate-n-15"><img class="rounded border shadow-sm d-lg-flex align-items-lg-center" src="../assets/img/logobiblio[black].png" style="width: 40px;transform: rotate(15deg) skew(0deg);">
+                    </div>
                     <div class="sidebar-brand-text mx-3"></div>
                 </a>
                 <ul class="navbar-nav text-light" id="accordionSidebar">
@@ -182,7 +183,7 @@ if (isset($_SESSION["login"])) {
         <div class="d-flex flex-column" id="content-wrapper" style="background: #e4dedf;">
             <div id="content" style="border-color: rgb(249,250,250);background: url(&quot;../assets/img/background.png&quot;) no-repeat, #e4dedf;background-size: cover, auto;">
                 <nav class="navbar navbar-light navbar-expand-lg shadow-lg d-lg-flex d-xl-flex d-xxl-flex" style="background: url(&quot;https://cdn.bootstrapstudio.io/placeholders/1400x800.png&quot;), #f9fafa;box-shadow: 0px 0px;">
-                    <div class="container-fluid"><a class="navbar-brand d-none d-sm-none d-md-none d-lg-block d-xl-block d-xxl-block flex-shrink-1" href="index.html" style="color: #7a6a5e;font-family: Amiri, serif;font-size: 17px;"><strong>Médiathèque Régionale de Monastir</strong><br></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1" style="background: #7a6a5e;border-color: rgb(122,106,94);"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                    <div class="container-fluid"><a class="navbar-brand d-none d-sm-none d-md-none d-lg-block d-xl-block d-xxl-block flex-shrink-1" href="./index.php" style="color: #7a6a5e;font-family: Amiri, serif;font-size: 17px;"><strong>Médiathèque Régionale de Monastir</strong><br></a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1" style="background: #7a6a5e;border-color: rgb(122,106,94);"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
                         <div class="collapse navbar-collapse d-lg-flex d-xl-flex d-xxl-flex justify-content-lg-end justify-content-xl-end justify-content-xxl-end" id="navcol-1" style="font-size: 25px;">
                             <ul class="navbar-nav" style="margin: 0px;padding: 0px;">
                                 <li class="nav-item"></li>
@@ -250,8 +251,8 @@ if (isset($_SESSION["login"])) {
                         <?php if (isset($_SESSION["login"]) && ($role != 1 && $role != 2)) { ?>
                             <div class="dropdown"><a class="dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" href="#" style="padding: 0px;color: #ef9c1f;font-weight: bold;"><img class="rounded-circle border rounded-0" style="width: 35px;height: 35px;margin: 0px;" src="<?php if ($usr["avatar"] != "") echo "../assets/img/avatars/" . $usr["avatar"];
                                                                                                                                                                                                                                                                                                 else echo "../assets/img/avatar.png"; ?>"> <?php $nom = explode(" ", $empr["empr_prenom"]);
-                                                                                                                                                                                                                                                                                                                                            echo $nom[0] . " " .
-                                                                                                                                                                                                                                                                                                                                                $empr["empr_nom"]  ?></a>
+                                                                                                                                                                                                                                                                                                                                        echo $nom[0] . " " .
+                                                                                                                                                                                                                                                                                                                                            $empr["empr_nom"]  ?></a>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="profile.php">
                                         <i class="far fa-user-circle" style="margin-right: 5px;"></i>Mon profile</a>

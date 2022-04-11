@@ -27,13 +27,106 @@ require_once("./navigation.php");
                     <div class="custom-control custom-checkbox small"></div>
                 </div><button class="btn btn-primary d-block btn-user w-100" type="submit" style="background: #EE9B00;border-color: rgb(239,236,232);color: #f9fafa;font-size: 18px;font-family: Amiri, serif;">Se connecter</button>
             </form>
-            <div class="text-center" style="margin-top: 15px;"><a class="small" href="forgot-password.html" style="border-color: rgb(239,236,232);color: rgb(43,42,41);font-family: Amiri, serif;font-size: 16px;">Mot de passe oubliée ?</a></div>
+            <div class="text-center" style="margin-top: 15px;"><a class="small" id="forget" style="border-color: rgb(239,236,232);color: rgb(43,42,41);font-family: Amiri, serif;font-size: 16px;">Mot de passe oubliée ?</a></div>
             <div class="text-center"><a class="small" href="./register.php" style="border-color: rgb(239,236,232);color: rgb(41,40,39);font-family: Amiri, serif;font-size: 16px;">Vous n'avez pas un compte ? Créez un maintenant !</a></div>
         </div>
     </div>
     </div>
     <script>
         $(function() {
+            $("#forget").on("click", (e) => {
+                alertify.prompt("Récupération du mot de passe", "S'il vous plaît saisissez votre email : ", "", (e, val) => {
+                    if (val == "") {
+                        alertify.error("Veuillez saisir votre email pour continuer !")
+                        e.cancel = true;
+                    } else {
+
+                        $.ajax({
+                            type: "post",
+                            url: "../Scripts/userManager.php?CheckMail",
+                            data: {
+                                email: val
+                            },
+                            dataType: "Json",
+                            beforeSend: () => {
+                                alertify.notify("Vérification..")
+
+                            },
+                            success: function(res) {
+                                if (res.code) {
+                                    localStorage.setItem("code", res.code);
+                                    alertify.prompt("Confirmation", "Un email est envoyé sur votre boite de récéption avec un code de confirmation .<br> Saissez le code reçu s'il vous plaît ", "", (ev, value) => {
+                                        ev.cancel = true;
+                                        if (value == "") {
+                                            alertify.error("Veuillez saisir le code !");
+                                        } else {
+                                            if (value == localStorage.getItem("code")) {
+                                                alertify.prompt("Nouveau mot de passe", "Veuillez saisir attentivement votre nouveau mot de passe", "", (evv, val1) => {
+                                                    if (val1 == "") {
+                                                        evv.cancel = true;
+                                                        alertify.error("Veuillez saisir un nouveau mot de passe !");
+
+                                                    } else {
+                                                        $.ajax({
+                                                            type: "post",
+                                                            url: "../Scripts/userManager.php?ChangePassword",
+                                                            data: {
+                                                                password: val1,
+                                                                email: val
+                                                            },
+                                                            dataType: "Json",
+                                                            beforeSend: () => {
+                                                                alertify.notify("operation en cours ...")
+
+                                                            },
+                                                            success: function(res) {
+                                                                alertify.success(res.msg);
+                                                                localStorage.removeItem("code");
+
+                                                            },
+                                                            error: (e) => {
+                                                                alertify.error(e.responseJSON.msg)
+                                                                console0log(e.responseJSON.error)
+
+                                                            }
+                                                        });
+                                                    }
+
+                                                }, (e) => {}).set({
+                                                    type: "password",
+                                                    labels: {
+                                                        ok: "confirmer",
+                                                        cancel: "annuler"
+                                                    }
+                                                })
+                                            } else {
+                                                alertify.error("code non valide");
+
+                                            }
+                                        }
+                                    }, (c) => {})
+
+                                }
+
+
+                            },
+                            error: (e) => {
+                                alertify.error(e.responseJSON.msg)
+
+                            }
+                        });
+
+                    }
+                }, (e) => {}).set({
+                    type: "email",
+                    labels: {
+                        ok: "Continuer",
+                        cancel: "Annuler"
+                    }
+                })
+            })
+
+
             $("#login").on("submit", (e) => {
                 e.preventDefault();
                 $.ajax({

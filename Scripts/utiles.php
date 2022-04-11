@@ -11,7 +11,7 @@ function Connect()
 }
 function RandomString($length = 10)
 {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';
     for ($i = 0; $i < $length; $i++) {
@@ -32,11 +32,35 @@ function runQuery($query)
 function checkEmail($email)
 {
     $connect = Connect();
-    $user = mysqli_num_rows(mysqli_query($connect, "SELECT * from userAccounts where Email like '$email'"));
+    $user = mysqli_num_rows(mysqli_query($connect, "SELECT * from useraccounts where Email like '$email'"));
     if ($user == 1) {
         return true;
     }
     return false;
+}
+function sendMail($email, $subject, $body)
+{
+    include("./Mailer/src/PHPMailer.php");
+    include("./Mailer/src/SMTP.php");
+    require("./Mailer/src/Exception.php");
+
+
+    $mail = new PHPMailer\PHPMailer\PHPMailer();
+    $mail->CharSet = "UTF-8";
+    $mail->isSMTP(); // Paramétrer le Mailer pour utiliser SMTP 
+    $mail->Host = 'smtp.gmail.com'; // Spécifier le serveur SMTP
+    $mail->SMTPAuth = true; // Activer authentication SMTP
+    $mail->SMTPSecure = 'ssl';
+    $mail->Username = 'Mediatheque.Monastir@gmail.com';
+    $mail->Password = 'Barcelona1899';
+    $mail->Port = 465;
+    $mail->SetFrom("Mediatheque.Monastir@gmail.com", "Médiathèque Régionale de Monastir");
+    $mail->AddAddress($email);
+    $mail->isHTML(true);
+    $mail->Subject = $subject;
+    $mail->Body = $body;
+    $mail->AltBody = $body;
+    $mail->send();
 }
 function GetEMPR($id)
 {
@@ -103,8 +127,8 @@ function GetAuthorById($id)
     } else {
         return false;
     }
-   
-   
+
+
     # code...
 }
 
@@ -127,7 +151,14 @@ function GetNumRows($req)
 function GetUser($id)
 {
     $connect = Connect();
-    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from userAccounts where idUser = '$id'"));
+    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from useraccounts where idUser = '$id'"));
+    return $user;
+    # code...
+}
+function GetUserByEmail($email)
+{
+    $connect = Connect();
+    $user = mysqli_fetch_array(mysqli_query($connect, "SELECT * from useraccounts where Email = '$email'"));
     return $user;
     # code...
 }

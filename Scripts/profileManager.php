@@ -26,9 +26,9 @@ if (isset($_GET["info"])) {
         if ($role == 1 || $role == 2) {
             $nom = $_POST["nom"];
 
-            $r2 = "UPDATE userAccounts SET nom='$nom',mpas='$newPass' where idUser='$id' ";
+            $r2 = "UPDATE useraccounts SET nom='$nom',mpas='$newPass' where idUser='$id' ";
         } else {
-            $r2 = "UPDATE userAccounts SET mpas='$newPass' where idUser='$id' ";
+            $r2 = "UPDATE useraccounts SET mpas='$newPass' where idUser='$id' ";
         }
     } else {
         $checkMail = checkEmail($email);
@@ -36,11 +36,11 @@ if (isset($_GET["info"])) {
             return "0";
         } else {
             if ($role == 0) {
-                $r2 = "UPDATE userAccounts SET mpas='$newPass',Email='$email' where idUser='$id ' ";
+                $r2 = "UPDATE useraccounts SET mpas='$newPass',Email='$email' where idUser='$id ' ";
             } else {
                 $nom = $_POST["nom"];
 
-                $r2 = "UPDATE userAccounts SET nom='$nom',mpas='$newPass',Email='$email' where idUser='$id'  ";
+                $r2 = "UPDATE useraccounts SET nom='$nom',mpas='$newPass',Email='$email' where idUser='$id'  ";
             }
         }
     }
@@ -86,7 +86,7 @@ if (isset($_GET["info"])) {
         unlink("../assets/img/avatars/" . $old);
     }
     if (move_uploaded_file($file_tmp = $_FILES["avatar"]["tmp_name"], "../assets/img/avatars/" . $file_name)) {
-        if (mysqli_query($connect, "UPDATE userAccounts SET avatar='$file_name' where idUser='$id'")) {
+        if (mysqli_query($connect, "UPDATE useraccounts SET avatar='$file_name' where idUser='$id'")) {
             $_SESSION["avatar"] = $file_name;
             echo "1";
         } else {

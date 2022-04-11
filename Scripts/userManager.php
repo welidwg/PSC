@@ -121,4 +121,47 @@ if (isset($_GET["Add"])) {
         http_response_code(500);
         echo json_encode(array("msg" => "Erreur de serveur !", "error" => mysqli_error($connect)));
     }
+} else if (isset($_GET["CheckMail"])) {
+    $email = $_POST["email"];
+    $check = checkEmail($email);
+    if ($check) {
+        $code = RandomString($length = 5);
+        $user = GetUserByEmail($email);
+        $subject = "Recuperation de mot de passe";
+        $body = "Bonjour <br><br>
+        Vous avez demandé de récupérer votre mot de passe. <br>
+        Pour récuperer ce dernier, vous devez saisr ce code au champs requis : <br><br>
+        Code : <strong>" . $code . "</strong>
+        <br>
+        Coridalement,<br>
+        Administration du médiathèque régionale de monastir.
+         ";
+        sendMail($email, $subject, $body);
+        http_response_code(200);
+        echo json_encode(array("code" => $code));
+    } else {
+        http_response_code(500);
+
+        echo json_encode(array("msg" => "Aucune inscription est affectuée par cet email !"));
+    }
+} else if (isset($_GET["ChangePassword"])) {
+    $email = $_POST["email"];
+    $pass = password_hash($_POST["password"], PASSWORD_BCRYPT);
+    $sql = "UPDATE userAccounts SET mpas='$pass' where Email='$email'";
+    if (mysqli_query($connect, $sql)) {
+        $subject = "changement mot de passe";
+        $body = "Bonjour <br><br>
+        Vous avez récuperer votre mot de passe avec succès ! 
+        <br>
+        Date et heure de l'opération : <strong>" . date("Y-m-d H:i") . "</strong><br><br>
+        Coridalement,<br>
+        Administration du médiathèque régionale de monastir.
+         ";
+        sendMail($email, $subject, $body);
+        http_response_code(200);
+        echo json_encode(array("msg" => "Operation Réussite !"));
+    } else {
+        http_response_code(500);
+        echo json_encode(array("msg" => "Opération échouée!", "error" => mysqli_error($connect)));
+    }
 }
