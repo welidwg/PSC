@@ -5,7 +5,7 @@
 </p>
 
 ## About MRM
-MRM is a web application that digitizes and organizes public library resources, providing users with a user-friendly platform to access and search for books, documents, and other materials in a convenient numerical format.
+MRM is a web application that digitizes and organizes public library resources, providing users with a user-friendly platform to access and search for books, documents, and other materials in a convenient numerical format. It was developed using native PHP.
 ## Website Link
 <a href="https://www.mrm.great-site.net/main/" target="_blank">https://www.mrm.great-site.net/main/</a>
 ## Screen Shots
